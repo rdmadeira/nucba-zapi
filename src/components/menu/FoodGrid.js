@@ -1,4 +1,12 @@
 import styled from 'styled-components';
+import { Title } from '../../styles/title';
+
+export const FoodLabel = styled(Title)`
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  font-size: 15px;
+`;
 
 export const FoodGrid = styled.div`
   display: grid;
@@ -11,10 +19,21 @@ export const Food = styled.div`
   background-image: ${({ img }) => `url(${img})`};
   background-position: center;
   background-size: cover;
+  filter: contrast(60%);
+  padding: 10px;
+  font-size: 25px;
+  
+  transition-property: box-shadow, margin-top;
+  transition-duration: 0.1s;
+  border-shadow: 0 0 2px 0 gray;
+  color: #000;
+  border-radius: 0 0 7px 7px;
   &:hover {
     filter: grayscale(.7);
-    transition: 0.3s all ease;
-    transform: scale(1.03);
+    box-shadow: 0 0 15px 0 gray;
+    
+    
+    transform: scale(1.02);
     cursor: pointer;
   }
   }

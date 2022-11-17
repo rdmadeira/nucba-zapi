@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Foods } from '../../data/data';
-import { Food, FoodGrid } from './FoodGrid';
+import { Food, FoodGrid, FoodLabel } from './FoodGrid';
 
 const MenuStyled = styled.div`
   height: 1000px;
@@ -16,10 +16,14 @@ const FoodTitle = styled.h3`
   text-align: right;
 `;
 
-const Menu = () => {
+const Menu = ({ setOpenFood }) => {
   /* console.log(Object.keys(Foods)); */
   return (
     <MenuStyled>
+      {/* Con esta opcion Object.keys y key, tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
+      Object.entries devuelve un array, cuyos elementos son array conteniendo la key y el array de foods.
+      Object.keys: [key1, key2, key3,...]
+      Object.entries: [[key1, foods], [key2, food2], [key3, food3],...]
       {Object.keys(Foods).map((key) => {
         return (
           <>
@@ -27,6 +31,20 @@ const Menu = () => {
             <FoodGrid>
               {Foods[key].map((food) => (
                 <Food img={food.img}>{food.name}</Food>
+              ))}
+            </FoodGrid>
+          </>
+        );
+      })} */}
+      {Object.entries(Foods).map(([key, foods]) => {
+        return (
+          <>
+            <FoodTitle>{key}</FoodTitle>
+            <FoodGrid>
+              {foods.map((food) => (
+                <Food img={food.img} onClick={() => setOpenFood(food)}>
+                  <FoodLabel>{food.name}</FoodLabel>
+                </Food>
               ))}
             </FoodGrid>
           </>
