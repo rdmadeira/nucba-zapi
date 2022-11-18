@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FoodLabel } from '../components/menu/FoodGrid';
+import { Title } from '../styles/title';
+import { nucbazapiRed } from '../styles/colors';
 
 // Los componentes estilizados son buenos para reaprovechar en varios componentes en la app.
 const Dialog = styled.div`
@@ -39,11 +41,35 @@ const DialogBannerName = styled(FoodLabel)`
   padding: 5px 10px;
 `;
 
-const FoodDialogContainer = ({ openFood }) => {
-  console.log(typeof openFood.img);
+const DialogContent = styled.div`
+  overflow: auto;
+  min-height: 100px;
+`;
+
+const DialogFooter = styled.div`
+  box-shadow: 0 -2px 10px 0px gray;
+  display: flex;
+  justify-content: center;
+`;
+
+const Confirmbutton = styled(Title)`
+  margin: 10px;
+  color: white;
+  height: 20px;
+  border-radius: 8px;
+  width: 200px;
+  cursor: pointer;
+  background-color: ${nucbazapiRed};
+  text-align: center;
+`;
+
+const FoodDialogContainer = ({ openFood, setOpenFood }) => {
+  const handlerClose = () => {
+    setOpenFood(null);
+  };
   return (
     <>
-      <DialogShadow />
+      <DialogShadow onClick={handlerClose} />
       <Dialog>
         <DialogBanner img={openFood.img}>
           <DialogBannerName>{openFood.name}</DialogBannerName>
@@ -55,7 +81,15 @@ const FoodDialogContainer = ({ openFood }) => {
 
 const FoodDialog = (props) => {
   if (!props.openFood) return null;
-  return <FoodDialogContainer openFood={props.openFood}></FoodDialogContainer>;
+  return (
+    <FoodDialogContainer
+      /* openFood={props.openFood}
+      setOpenFood={props.setOpenFood} */
+      {...props}
+    >
+      Algoooo
+    </FoodDialogContainer>
+  );
 };
 
 export default FoodDialog;
