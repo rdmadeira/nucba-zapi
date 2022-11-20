@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { FoodLabel } from '../components/menu/FoodGrid';
 import { Title } from '../styles/title';
 import { nucbazapiRed } from '../styles/colors';
+import { formatPriceARS } from '../data/data';
 
 // Los componentes estilizados son buenos para reaprovechar en varios componentes en la app.
 const Dialog = styled.div`
   width: 500px;
   background-color: white;
   position: fixed;
-  top: 150px;
+  top: 100px;
   z-index: 5;
   max-height: calc(100% - 100px);
   left: calc(50% - 250px);
@@ -33,7 +34,7 @@ const DialogBanner = styled.div`
   ${(img) => `background-image: url(${img.img})`};
   background-position: center;
   background-size: cover;
-  boeder-radius: 8px 8px 0 0;
+  border-radius: 8px 8px 0 0;
 `;
 
 const DialogBannerName = styled(FoodLabel)`
@@ -41,30 +42,47 @@ const DialogBannerName = styled(FoodLabel)`
   padding: 5px 10px;
 `;
 
-const DialogContent = styled.div`
+// Si el contenido del DialogContent pasa el max-height de 400px, aparecerá un scroll (over-flow: auto)
+export const DialogContent = styled.div`
   overflow: auto;
   min-height: 100px;
+  max-height: 400px;
 `;
 
-const DialogFooter = styled.div`
+export const DialogFooter = styled.div`
   box-shadow: 0 -2px 10px 0px gray;
   display: flex;
   justify-content: center;
 `;
 
-const Confirmbutton = styled(Title)`
+export const Confirmbutton = styled(Title)`
   margin: 10px;
   color: white;
-  height: 20px;
   border-radius: 8px;
   width: 200px;
   cursor: pointer;
   background-color: ${nucbazapiRed};
   text-align: center;
+  padding: 10px;
+  &:hover {
+    opacity: 0.7;
+  }
+  &:active {
+    opacity: 1;
+  }
 `;
 
-const FoodDialogContainer = ({ openFood, setOpenFood }) => {
+const FoodDialogContainer = ({ openFood, setOpenFood, orders, setOrders }) => {
   const handlerClose = () => {
+    setOpenFood(null);
+  };
+
+  const order = {
+    ...openFood,
+  };
+
+  const handlerAddToOrders = () => {
+    setOrders([...orders, order]);
     setOpenFood(null);
   };
   return (
@@ -74,6 +92,14 @@ const FoodDialogContainer = ({ openFood, setOpenFood }) => {
         <DialogBanner img={openFood.img}>
           <DialogBannerName>{openFood.name}</DialogBannerName>
         </DialogBanner>
+        <DialogContent>
+          <div>Algooo</div>
+        </DialogContent>
+        <DialogFooter>
+          <Confirmbutton onClick={handlerAddToOrders}>
+            Agregar {formatPriceARS(openFood.price)}
+          </Confirmbutton>
+        </DialogFooter>
       </Dialog>
     </>
   );
