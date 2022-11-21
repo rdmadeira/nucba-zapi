@@ -18,6 +18,8 @@ const OrderStyled = styled.div`
   box-shadow: 4px 0 5px 4px grey;
   display: flex;
   flex-direction: column;
+  transform: translateX(100%);
+  transition: 0.6s transform ease-in;
 `;
 
 const OrderContent = styled(DialogContent)`
