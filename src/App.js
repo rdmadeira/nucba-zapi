@@ -3,10 +3,10 @@ import { GlobalStyle } from './styles/GlobalStyle';
 import { Navbar } from './components/navbar/Navbar';
 import { Banner } from './components/banner/Banner';
 import Menu from './components/menu/Menu';
-import FoodDialog from './foodDialog/FoodDialog';
+import FoodDialog from './components/foodDialog/FoodDialog';
 import { useOpenFood } from './hooks/useOpenFood';
 import { useOrders } from './hooks/useOrders';
-import { Order } from './orders/Order';
+import { Order } from './components/orders/Order';
 
 function App() {
   const openedFood = useOpenFood();

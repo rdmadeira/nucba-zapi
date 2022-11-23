@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { formatPriceARS } from '../data/data';
+import { formatPriceARS } from '../../data/data';
 import {
   Confirmbutton,
   DialogFooter,
@@ -18,7 +18,7 @@ const OrderStyled = styled.div`
   box-shadow: 4px 0 5px 4px grey;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
+  /* transform: translateX(100%); */
   transition: 0.6s transform ease-in;
 `;
 

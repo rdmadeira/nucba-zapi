@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FoodLabel } from '../components/menu/FoodGrid';
-import { Title } from '../styles/title';
-import { nucbazapiRed } from '../styles/colors';
-import { formatPriceARS } from '../data/data';
+import { FoodLabel } from '../menu/FoodGrid';
+import { Title } from '../../styles/title';
+import { nucbazapiRed } from '../../styles/colors';
+import { formatPriceARS } from '../../data/data';
 
 // Los componentes estilizados son buenos para reaprovechar en varios componentes en la app.
 const Dialog = styled.div`
