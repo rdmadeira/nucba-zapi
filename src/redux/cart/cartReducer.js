@@ -1,3 +1,5 @@
+import { TOOGLE_CART_HIDDEN } from './cartActions';
+
 const INITIAL_STATE = {
   hidden: true,
   cartItems: [],
@@ -5,6 +7,11 @@ const INITIAL_STATE = {
 
 const cartReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TOOGLE_CART_HIDDEN:
+      return {
+        ...state,
+        hidden: !state.hidden,
+      };
     default:
       return state;
   }

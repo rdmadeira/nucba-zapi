@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Foods, formatPriceARS } from '../../data/data';
+import { formatPriceARS } from '../../data/data';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
+
+import { useSelector } from 'react-redux';
 
 const MenuStyled = styled.div`
   height: 1000px;
@@ -17,7 +19,7 @@ const FoodTitle = styled.h3`
 `;
 
 const Menu = ({ setOpenFood }) => {
-  /* console.log(Object.keys(Foods)); */
+  const Foods = useSelector((store) => store.products.foods);
   return (
     <MenuStyled>
       {/* Con esta opcion Object.keys y key, tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
