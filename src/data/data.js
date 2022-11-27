@@ -102,7 +102,7 @@ export const foodItems = [
 export const arraySections = [
   {
     section: 'Bahiana',
-    imgTag: 'img/tag_bahiana.jpeg',
+    imgTag: 'img/tag_bahiana.jpg',
   },
 
   {

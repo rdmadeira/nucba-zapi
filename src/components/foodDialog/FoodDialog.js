@@ -4,6 +4,8 @@ import { FoodLabel } from '../menu/FoodGrid';
 import { Title } from '../../styles/title';
 import { nucbazapiRed } from '../../styles/colors';
 import { formatPriceARS } from '../../data/data';
+import { useDispatch } from 'react-redux';
+import * as cartActions from '../../redux/cart/cartActions';
 
 // Los componentes estilizados son buenos para reaprovechar en varios componentes en la app.
 const Dialog = styled.div`
@@ -19,7 +21,7 @@ const Dialog = styled.div`
   border-radius: 8px;
 `;
 
-const DialogShadow = styled.div`
+export const DialogShadow = styled.div`
   position: fixed;
   height: 100%;
   width: 100%;
@@ -72,18 +74,15 @@ export const Confirmbutton = styled(Title)`
   }
 `;
 
-const FoodDialogContainer = ({ openFood, setOpenFood, orders, setOrders }) => {
+const FoodDialogContainer = ({ openFood, setOpenFood }) => {
+  const dispatch = useDispatch();
+
   const handlerClose = () => {
     setOpenFood(null);
   };
 
-  const order = {
-    ...openFood,
-  };
-
-  const handlerAddToOrders = () => {
-    setOrders([...orders, order]);
-    setOpenFood(null);
+  const addToOrders = () => {
+    dispatch(cartActions.addItem(openFood));
   };
   return (
     <>
@@ -96,7 +95,7 @@ const FoodDialogContainer = ({ openFood, setOpenFood, orders, setOrders }) => {
           <div>Algooo</div>
         </DialogContent>
         <DialogFooter>
-          <Confirmbutton onClick={handlerAddToOrders}>
+          <Confirmbutton onClick={addToOrders}>
             Agregar {formatPriceARS(openFood.price)}
           </Confirmbutton>
         </DialogFooter>

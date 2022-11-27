@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { formatPriceARS } from '../../data/data';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
+import { Tagsmenu, Tagcard, Tagimg } from './TagMenu';
 
 import { useSelector } from 'react-redux';
 
 const MenuStyled = styled.div`
   height: 1000px;
-  width: 50%;
+  /* width: 50%; */
   margin: 0px 20px 50px 20px;
   z-index: 3;
 `;
@@ -19,9 +20,19 @@ const FoodTitle = styled.h3`
 `;
 
 const Menu = ({ setOpenFood }) => {
-  const Foods = useSelector((store) => store.products.foods);
+  const foods = useSelector((store) => store.products.foods);
+  const categories = useSelector((store) => store.categories.categories);
   return (
     <MenuStyled>
+      <h2>Menu</h2>
+      <Tagsmenu>
+        {categories.map((category) => (
+          <Tagcard>
+            <Tagimg img={category.imgTag} />
+            <p>{category.section}</p>
+          </Tagcard>
+        ))}
+      </Tagsmenu>
       {/* Con esta opcion Object.keys y key, tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
       Object.entries devuelve un array, cuyos elementos son array conteniendo la key y el array de foods.
       Object.keys: [key1, key2, key3,...]
@@ -38,7 +49,7 @@ const Menu = ({ setOpenFood }) => {
           </>
         );
       })} */}
-      {Object.entries(Foods).map(([key, foods]) => {
+      {Object.entries(foods).map(([key, foods]) => {
         return (
           <>
             <FoodTitle>{key}</FoodTitle>

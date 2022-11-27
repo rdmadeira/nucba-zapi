@@ -10,7 +10,7 @@ export const FoodLabel = styled(Title)`
 
 export const FoodGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
 `;
 
@@ -22,19 +22,17 @@ export const Food = styled.div`
   filter: contrast(60%);
   padding: 10px;
   font-size: 25px;
-  
+
   transition-property: box-shadow, margin-top;
   transition-duration: 0.1s;
-  border-shadow: 0 0 2px 0 gray;
+  box-shadow: 0 0 2px 0 gray;
   color: #000;
   border-radius: 0 0 7px 7px;
   &:hover {
-    filter: grayscale(.7);
+    filter: grayscale(0.7);
     box-shadow: 0 0 15px 0 gray;
-    
-    
+
     transform: scale(1.02);
     cursor: pointer;
-  }
   }
 `; // img es una propriedad de props, pasado al componente Food. Ej.: <Food img='string' />

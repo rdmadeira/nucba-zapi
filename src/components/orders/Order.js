@@ -5,7 +5,11 @@ import {
   Confirmbutton,
   DialogFooter,
   DialogContent,
+  DialogShadow,
 } from '../foodDialog/FoodDialog';
+import { QuantityManage } from './QuantityManage';
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartActions from '../../redux/cart/cartActions';
 
 const OrderStyled = styled.div`
   position: fixed;
@@ -18,8 +22,9 @@ const OrderStyled = styled.div`
   box-shadow: 4px 0 5px 4px grey;
   display: flex;
   flex-direction: column;
+  transform: ${({ show }) => (show ? `translateX(100%)` : `translateX(0)`)};
   /* transform: translateX(100%); */
-  transition: 0.6s transform ease-in;
+  transition: 0.3s transform ease-in;
 `;
 
 const OrderContent = styled(DialogContent)`
@@ -30,39 +35,69 @@ const OrderContent = styled(DialogContent)`
 
 const OrderContainer = styled.div`
   padding: 10px 5px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #f7f7f7;
 `;
 
 const OrderItem = styled.div`
   padding: 10px 5px;
   display: grid;
-  grid-template-columns: 20px 150px 20px 60px;
+  grid-template-columns: 50px 100px 100px;
   justify-content: space-between;
 `;
 
-export const Order = ({ orders }) => {
-  return (
-    <OrderStyled>
-      {orders?.length === 0 ? (
-        <OrderContent>No hay pedidos!!</OrderContent>
-      ) : (
-        <OrderContent>
-          <OrderContainer>Tu pedido:</OrderContainer>
+const ItemImg = styled.div`
+  width: 46px;
+  height: 46px;
+  background-image: ${({ img }) => `url(${img})`};
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  border-radius: 10px;
+`;
 
-          {orders.map((order) => (
-            <OrderContainer>
-              <OrderItem>
-                <div>1</div>
-                <div>{order.name}</div>
-                <div>{formatPriceARS(order.price)}</div>
-              </OrderItem>
-            </OrderContainer>
-          ))}
-        </OrderContent>
-      )}
-      <DialogFooter>
-        <Confirmbutton>Ir a Pagar</Confirmbutton>
-      </DialogFooter>
-    </OrderStyled>
+export const Order = () => {
+  const hidden = useSelector((state) => state.cart.hidden);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
+
+  const total = cartItems.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
+
+  const handlerToggle = () => dispatch(cartActions.toogleCartHidden());
+
+  return (
+    <>
+      {hidden && <DialogShadow onClick={handlerToggle} />}
+      <OrderStyled show={!hidden}>
+        {cartItems?.length === 0 ? (
+          <OrderContent>No hay pedidos!!</OrderContent>
+        ) : (
+          <OrderContent>
+            <OrderContainer>Tu pedido:</OrderContainer>
+
+            {cartItems.map((cartItem) => (
+              <OrderContainer>
+                <OrderItem>
+                  <ItemImg img={cartItem.img} />
+                  <div>
+                    <div>{cartItem.name}</div>
+                    {formatPriceARS(cartItem.price * cartItem.quantity)}
+                  </div>
+                  <div>
+                    <QuantityManage item={cartItem}></QuantityManage>
+                  </div>
+                </OrderItem>
+              </OrderContainer>
+            ))}
+          </OrderContent>
+        )}
+        <DialogFooter>
+          <Confirmbutton>Ir a Pagar {formatPriceARS(total)}</Confirmbutton>
+        </DialogFooter>
+      </OrderStyled>
+    </>
   );
 };
