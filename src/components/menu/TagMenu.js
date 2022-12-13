@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { nucbazapiGray } from '../../styles/colors';
+import { nucbazapiGray } from '../../styles/utilities';
 
 export const Tagsmenu = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ export const Tagcard = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ selected }) => (selected ? '#e8e8e8' : '#fff')};
+  background: ${({ selected }) => (selected ? '#8af79d' : '#fff')};
   color: ${nucbazapiGray};
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.09);
   border-radius: 20px;

@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { FoodLabel } from '../menu/FoodGrid';
 import { Title } from '../../styles/title';
-import { nucbazapiRed } from '../../styles/colors';
+import { nucbazapiRed } from '../../styles/utilities';
 import { formatPriceARS } from '../../data/data';
 import { useDispatch } from 'react-redux';
 import * as cartActions from '../../redux/cart/cartActions';
+import above from '../../styles/utilities';
 
 // Los componentes estilizados son buenos para reaprovechar en varios componentes en la app.
 const Dialog = styled.div`

@@ -116,7 +116,7 @@ export const arraySections = [
   },
 
   {
-    section: 'Sambuchitos',
+    section: 'Sanguches',
     imgTag: 'img/tag_sambu.jpeg',
   },
 ];

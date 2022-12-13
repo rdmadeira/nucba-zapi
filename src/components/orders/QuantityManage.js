@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Title } from '../../styles/title';
-import { nucbazapiRed } from '../../styles/colors';
+import { nucbazapiRed } from '../../styles/utilities';
 import RemoveIcon from '../../assets/delete-full.svg';
 import { useDispatch } from 'react-redux';
 import * as cartActions from '../../redux/cart/cartActions';

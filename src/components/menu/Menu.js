@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { formatPriceARS } from '../../data/data';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
@@ -20,14 +20,28 @@ const FoodTitle = styled.h3`
 `;
 
 const Menu = ({ setOpenFood }) => {
-  const foods = useSelector((store) => store.products.foods);
+  const [section, setSection] = useState(null);
+  let foods = useSelector((store) => store.products.foods);
   const categories = useSelector((store) => store.categories.categories);
+
+  if (section) {
+    foods = { [section]: foods[section] };
+  }
+
   return (
     <MenuStyled>
       <h2>Menu</h2>
       <Tagsmenu>
+        {section && (
+          <Tagcard onClick={() => setSection(null)}>
+            <p>Todos</p>
+          </Tagcard>
+        )}
         {categories.map((category) => (
-          <Tagcard>
+          <Tagcard
+            onClick={() => setSection(category.section)}
+            selected={category.section === section ? true : false}
+          >
             <Tagimg img={category.imgTag} />
             <p>{category.section}</p>
           </Tagcard>
