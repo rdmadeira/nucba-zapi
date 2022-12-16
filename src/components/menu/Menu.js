@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { formatPriceARS } from '../../data/data';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
 import { Tagsmenu, Tagcard, Tagimg } from './TagMenu';
-
 import { useSelector } from 'react-redux';
 
 const MenuStyled = styled.div`

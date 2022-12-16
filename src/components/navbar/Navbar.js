@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/nucbazappiintegral.png';
 import Carticon from '../cart/Carticon';
+import { fixed } from '../../styles/utilities';
 
 const NavbarStyled = styled.div`
   padding: 10px;
-  position: fixed;
+  ${fixed()} // En position.js se definió valores default para propX, propY, x, y - y también al objeto esperado como parametro de la función, como objeto vacío.
+  // Así no hace falta especificar los valores ni el objeto en la funciónb fixed.
   background-color: #f1e7ca70;
   width: 100%;
   z-index: 999;
