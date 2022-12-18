@@ -58,7 +58,7 @@ const StyledLabel = styled.label`
   ${({ showError }) =>
     showError
       ? css`
-          color: 'red';
+          color: red;
         `
       : null}
 `;
@@ -120,11 +120,11 @@ export const Input = (props) => {
     <FormControl>
       <StyledLabel
         htmlFor={props.id}
-        showError={!inputState.isValid && inputState.isTouch}
+        showError={!inputState.isValid && inputState.isTouche}
       >
         {props.label}
       </StyledLabel>
-      <InputContainer>
+      <InputContainer showError={!inputState.isValid && inputState.isTouche}>
         <StyledInput
           id={props.id}
           type={props.type}
@@ -132,10 +132,10 @@ export const Input = (props) => {
           onChange={changeHandler}
           onBlur={toucheHandler}
           value={inputState.value}
-          showError={!inputState.isValid && inputState.isTouch}
+          showError={!inputState.isValid && inputState.isTouche}
         />
       </InputContainer>
-      {!inputState.isValid && inputState.isTouch && (
+      {!inputState.isValid && inputState.isTouche && (
         <ErrorText>{props.errorText}</ErrorText>
       )}
     </FormControl>

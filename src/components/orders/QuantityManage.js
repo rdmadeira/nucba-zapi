@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Title } from '../../styles/title';
+import { Title } from '../../components/UI';
 import { nucbazapiRed } from '../../styles/utilities';
 import RemoveIcon from '../../assets/delete-full.svg';
 import { useDispatch } from 'react-redux';

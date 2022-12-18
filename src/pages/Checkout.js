@@ -26,7 +26,6 @@ const Checkout = () => {
     <LayoutPage>
       <Wrapper>
         <ShippingForm></ShippingForm>
-        <div style={{ backgroundColor: 'red' }}>dos</div>
       </Wrapper>
     </LayoutPage>
   );

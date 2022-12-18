@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FoodLabel } from '../menu/FoodGrid';
-import { Title } from '../../styles/title';
+import { Title } from '../../components/UI';
 import { nucbazapiRed } from '../../styles/utilities';
 import { formatPriceARS } from '../../utils';
 import { useDispatch } from 'react-redux';

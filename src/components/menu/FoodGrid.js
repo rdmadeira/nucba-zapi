@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Title } from '../../styles/title';
+import { Title } from '../../components/UI';
 import { below } from '../../styles/utilities';
 
 export const FoodLabel = styled(Title)`
