@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { formatPriceARS } from '../../data/data';
+import { formatPriceARS } from '../../utils/formatPrices';
 import {
   Confirmbutton,
   DialogFooter,
@@ -10,6 +10,7 @@ import {
 import { QuantityManage } from './QuantityManage';
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartActions from '../../redux/cart/cartActions';
+import { Link } from 'react-router-dom';
 
 const OrderStyled = styled.div`
   position: fixed;
@@ -95,7 +96,9 @@ export const Order = () => {
           </OrderContent>
         )}
         <DialogFooter>
-          <Confirmbutton>Ir a Pagar {formatPriceARS(total)}</Confirmbutton>
+          <Link to="/checkout" onClick={handlerToggle}>
+            <Confirmbutton>Ir a Pagar {formatPriceARS(total)}</Confirmbutton>
+          </Link>
         </DialogFooter>
       </OrderStyled>
     </>

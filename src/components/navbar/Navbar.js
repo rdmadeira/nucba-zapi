@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import logo from '../../assets/nucbazappiintegral.png';
 import Carticon from '../cart/Carticon';
 import { fixed } from '../../styles/utilities';
+import { Link } from 'react-router-dom';
 
 const NavbarStyled = styled.div`
   padding: 10px;
@@ -33,7 +34,9 @@ const Logo = styled.img`
 export const Navbar = () => {
   return (
     <NavbarStyled>
-      <Logo src={logo} />
+      <Link to="/">
+        <Logo src={logo} />
+      </Link>
       <NavigatorMenu>
         <Carticon />
       </NavigatorMenu>

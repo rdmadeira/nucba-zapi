@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { formatPriceARS } from '../../data/data';
+import { formatPriceARS } from '../../utils';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
 import { Tagsmenu, Tagcard, Tagimg } from './TagMenu';
 import { useSelector } from 'react-redux';
