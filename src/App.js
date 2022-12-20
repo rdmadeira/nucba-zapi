@@ -6,6 +6,7 @@ import { Order } from './components/orders/Order';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Checkout from './pages/Checkout';
+import Login from './pages/Login';
 
 function App() {
   const openedFood = useOpenFood();
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home openedFood={openedFood} />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </>
