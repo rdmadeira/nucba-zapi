@@ -15,6 +15,7 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from '../utils';
+import { auth, signInWithGoogle } from '../firebase/firebase-utils';
 
 const ContainerButtons = styled.div`
   display: flex;
@@ -76,7 +77,7 @@ const Login = () => {
               <LoginSubmitButton disabled={!formState.isValid}>
                 Ingresar
               </LoginSubmitButton>
-              <GoogleButton disabled={!formState.isValid}>
+              <GoogleButton onClick={signInWithGoogle}>
                 <GoogleIcon src={GoogleLogo} />
                 <p>Login con Google</p>
               </GoogleButton>
