@@ -50,10 +50,15 @@ const Login = () => {
       isValid: false,
     },
   });
+
+  const submitHandle = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <LayoutPage>
       <Wrapper>
-        <form>
+        <form onSubmit={submitHandle}>
           <FormStyled>
             <FormContent>
               <Input

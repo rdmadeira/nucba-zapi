@@ -1,11 +1,6 @@
-/* import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite'; */
-import firebase from 'firebase';
-
-/* ERROR in ./src/firebase/firebase-utils.js 5:0-32
-Module not found: Error: Package path . is not exported from package C:\Users\Administrador\Desktop\WebDesigner\Nucba-zapi\nucba-zapi\node_modules\firebase (see exports field in C:\Users\Administrador\Desktop\WebDesigner\Nucba-zapi\nucba-zapi\node_modules\firebase\package.json) */
-import 'firebase/firestore'; // revisar documentacion nueva
-import 'firebase/auth'; // revisar documentacion nueva
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBfxqdmuOZgoHjXyZktUL0RDKWwTHgifHo',
@@ -16,34 +11,85 @@ const firebaseConfig = {
   appId: '1:506080692779:web:e3b110d34bab43f03df86e',
 };
 
-/* const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); */
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
-  const userBase = firebase.get();
-  const userSnapshot = await userBase.get();
 
-  if (!userSnapshot.exists) {
-    const { displayname, email } = userAuth;
+  const userRef = firestore.doc(`users/${userAuth.id}`);
+  const snapshot = await userRef.get();
+  console.log(additionalData);
+
+  if (!snapshot.exists) {
+    const { displayName, email } = userAuth;
     const createdAt = new Date();
 
     try {
-      userBase.set({
-        displayname,
+      await userRef.set({
+        displayName,
         email,
         createdAt,
         ...additionalData,
       });
     } catch (error) {
-      console.log('Error al crear usuario', error.message);
+      console.log('Error creating user', error.message);
     }
-    return userBase;
   }
+  return userRef;
 };
 
+export const createOrderDocument = async (order) => {
+  if (!order) return;
+  const orderRef = firestore.doc(`orders/${order.id}`);
+  const snapshot = await orderRef.get();
+  if (!snapshot.exists) {
+    const createdAt = new Date();
+
+    try {
+      await orderRef.set({
+        userId: order.userId,
+        shippingDetails: {
+          ...order.shippingDetails,
+        },
+        items: [...order.items],
+        shippingPrice: order.shippingPrice,
+        subtotal: order.subtotal,
+        total: order.total,
+        status: 'pendiente',
+        createdAt,
+      });
+    } catch (error) {
+      console.log('Error creating order', error.message);
+    }
+  }
+  return orderRef;
+};
+
+export const getOrders = async (userId) => {
+  const orderRef = await firestore
+    .collection('orders')
+    .where('userId', '==', userId)
+    .orderBy('createdAt', 'desc');
+
+  let orders = await orderRef
+    .get()
+    .then(function (querySnapshot) {
+      let orders = [];
+      querySnapshot.forEach(function (doc) {
+        orders = [...orders, { id: doc.id, ...doc.data() }];
+      });
+      return orders;
+    })
+    .catch(function (error) {
+      console.log('Error getting documents: ', error);
+    });
+
+  return orders;
+};
+
+firebase.initializeApp(firebaseConfig);
+
 export const auth = firebase.auth();
-const firestore = firebase.firestore();
+export const firestore = firebase.firestore();
+
 const provider = new firebase.auth.GoogleAuthProvider();
 
-export const signInWithGoogle = () => auth.signInWithPopUp(provider);
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
