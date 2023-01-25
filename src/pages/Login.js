@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Wrapper,
   Input,
@@ -40,6 +42,9 @@ const GoogleIcon = styled.img`
 `;
 
 const Login = () => {
+  const currentUser = useSelector((store) => store.user.currentUser);
+  const navigate = useNavigate();
+
   const [formState, inputHandle] = useForm({
     email: {
       value: '',
