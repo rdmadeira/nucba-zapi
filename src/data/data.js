@@ -1,5 +1,3 @@
-// Funcion formatear moneda AR$
-
 export const foodItems = [
   {
     id: 1,

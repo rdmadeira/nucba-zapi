@@ -5,6 +5,7 @@ import Carticon from '../cart/Carticon';
 import { fixed } from '../../styles/utilities';
 import { Link } from 'react-router-dom';
 import userIcon from '../../assets/user.svg';
+import { auth } from '../../firebase/firebase-utils';
 
 const NavbarStyled = styled.div`
   padding: 10px;
@@ -71,7 +72,7 @@ export const Navbar = () => {
         <Link to="/login">
           <LoginButton>Ingresar</LoginButton>
         </Link>
-        <UserLogo src={userIcon} />
+        <UserLogo src={userIcon} onClick={() => auth.signOut()} />
       </NavigatorMenu>
     </NavbarStyled>
   );

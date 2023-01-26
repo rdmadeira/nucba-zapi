@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,12 +17,18 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from '../utils';
-import { auth, signInWithGoogle } from '../firebase/firebase-utils';
+import {
+  auth,
+  signInWithGoogle,
+  createUserProfileDocument,
+} from '../firebase/firebase-utils';
+import { nucbazapiRed } from '../styles/utilities';
 
 const ContainerButtons = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  padding: 10px;
 `;
 
 const LoginSubmitButton = styled(CustomButton)`
@@ -41,11 +47,28 @@ const GoogleIcon = styled.img`
   cursor: pointer;
 `;
 
+const Alink = styled.a`
+  color: ${nucbazapiRed};
+  margin-left: 5px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Login = () => {
+  const [isLoginMode, setIsLoginMode] = useState(true);
+
   const currentUser = useSelector((store) => store.user.currentUser);
   const navigate = useNavigate();
 
-  const [formState, inputHandle] = useForm({
+  useEffect(() => {
+    if (currentUser) {
+      navigate(-1);
+    }
+  }, [currentUser, navigate]);
+
+  const [formState, inputHandle, setFormData] = useForm({
     email: {
       value: '',
       isValid: false,
@@ -56,8 +79,57 @@ const Login = () => {
     },
   });
 
-  const submitHandle = (e) => {
+  const submitHandle = async (e) => {
     e.preventDefault();
+    if (isLoginMode) {
+      try {
+        await auth.signInWithEmailAndPassword(
+          formState.inputs.email.value,
+          formState.inputs.password.value
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const { user } = auth.createUserWithEmailAndPassword(
+          formState.inputs.email.value,
+          formState.inputs.password.value
+        );
+        await createUserProfileDocument(user, {
+          displayName: formState.inputs.displayName.value,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const switchLoginModeHandle = () => {
+    if (!isLoginMode) {
+      setFormData(
+        {
+          email: { value: '', isValid: false },
+          password: {
+            value: '',
+            isValid: false,
+          },
+        },
+        formState.inputs.email?.isValid && formState.inputs.password?.isValid
+      );
+    } else {
+      setFormData(
+        {
+          ...formState.inputs,
+          displayName: {
+            value: '',
+            isValid: false,
+          },
+        },
+        false
+      );
+    }
+    setIsLoginMode((previous) => !previous);
   };
 
   return (
@@ -66,6 +138,16 @@ const Login = () => {
         <form onSubmit={submitHandle}>
           <FormStyled>
             <FormContent>
+              {!isLoginMode && (
+                <Input
+                  id="displayName"
+                  type="text"
+                  label="nombre"
+                  onInput={inputHandle}
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="Ingresá un Nombre"
+                />
+              )}
               <Input
                 id="email"
                 type="email"
@@ -80,17 +162,27 @@ const Login = () => {
                 label="Password"
                 onInput={inputHandle}
                 validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
-                errorText="Ingresá un Email válido"
+                errorText="Ingresá una contraseña válida"
               />
             </FormContent>
             <ContainerButtons>
               <LoginSubmitButton disabled={!formState.isValid}>
-                Ingresar
+                {isLoginMode ? 'Ingresar' : 'Registrar'}
               </LoginSubmitButton>
               <GoogleButton onClick={signInWithGoogle}>
                 <GoogleIcon src={GoogleLogo} />
                 <p>Login con Google</p>
               </GoogleButton>
+            </ContainerButtons>
+            <ContainerButtons>
+              <span>
+                {isLoginMode
+                  ? 'Ya tenes una cuenta? '
+                  : 'Todavía no estás Registrado? '}
+              </span>
+              <Alink onClick={switchLoginModeHandle}>
+                {!isLoginMode ? 'Ingresá' : 'Registrar'}
+              </Alink>
             </ContainerButtons>
           </FormStyled>
         </form>
