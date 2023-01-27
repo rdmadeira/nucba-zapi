@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChange(dispatch, userActions.setCurrentuser);
     return () => {
-      unsubscribe(); // Error unsuscribe is not a function !!
+      unsubscribe();
     };
   }, [dispatch]);
 

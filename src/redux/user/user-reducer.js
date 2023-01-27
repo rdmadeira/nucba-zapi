@@ -1,6 +1,7 @@
 import { SET_CURRENT_USER } from './user-actions';
 const INITIAL_STATE = {
   currentUser: null,
+  hiddenMenu: true,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {

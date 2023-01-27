@@ -79,8 +79,8 @@ const Login = () => {
     },
   });
 
-  const submitHandle = async (e) => {
-    e.preventDefault();
+  const submitHandle = async (event) => {
+    event.preventDefault();
     if (isLoginMode) {
       try {
         await auth.signInWithEmailAndPassword(
@@ -92,7 +92,7 @@ const Login = () => {
       }
     } else {
       try {
-        const { user } = auth.createUserWithEmailAndPassword(
+        const { user } = await auth.createUserWithEmailAndPassword(
           formState.inputs.email.value,
           formState.inputs.password.value
         );
@@ -131,7 +131,7 @@ const Login = () => {
     }
     setIsLoginMode((previous) => !previous);
   };
-
+  console.log(formState.inputs);
   return (
     <LayoutPage>
       <Wrapper>
@@ -142,7 +142,7 @@ const Login = () => {
                 <Input
                   id="displayName"
                   type="text"
-                  label="nombre"
+                  label="Nombre"
                   onInput={inputHandle}
                   validators={[VALIDATOR_REQUIRE()]}
                   errorText="Ingresá un Nombre"

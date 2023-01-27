@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import logo from '../../assets/nucbazappiintegral.png';
 import Carticon from '../cart/Carticon';
 import { fixed } from '../../styles/utilities';
 import { Link } from 'react-router-dom';
 import userIcon from '../../assets/user.svg';
 import { auth } from '../../firebase/firebase-utils';
+import { UserMenu } from '../userMenu/UserMenu';
 
 const NavbarStyled = styled.div`
   padding: 10px;
@@ -61,6 +63,7 @@ const LoginButton = styled.button`
 
 // Este es un componente funcional, que tiene children 'componentes estilizados'
 export const Navbar = () => {
+  const currentUser = useSelector((store) => store.user.currentUser);
   return (
     <NavbarStyled>
       <Link to="/">
@@ -69,10 +72,23 @@ export const Navbar = () => {
       <NavigatorMenu>
         <Carticon />
         <Divider />
-        <Link to="/login">
-          <LoginButton>Ingresar</LoginButton>
-        </Link>
-        <UserLogo src={userIcon} onClick={() => auth.signOut()} />
+        {currentUser ? (
+          <>
+            <UserLogo
+              src={userIcon}
+              onClick={() =>
+                auth.signOut().then(() => {
+                  console.log('user logged out');
+                })
+              }
+            />
+            <UserMenu user={currentUser} />
+          </>
+        ) : (
+          <Link to="/login">
+            <LoginButton>Ingresar</LoginButton>
+          </Link>
+        )}
       </NavigatorMenu>
     </NavbarStyled>
   );
