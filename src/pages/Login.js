@@ -56,8 +56,15 @@ const Alink = styled.a`
   }
 `;
 
+const SpanErrorStyled = styled.span`
+  color: red;
+  display: flex;
+  justify-content: center;
+`;
+
 const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [signInError, setSignInError] = useState(undefined);
 
   const currentUser = useSelector((store) => store.user.currentUser);
   const navigate = useNavigate();
@@ -78,6 +85,9 @@ const Login = () => {
       isValid: false,
     },
   });
+  useEffect(() => {
+    setSignInError(false);
+  }, [formState.inputs]);
 
   const submitHandle = async (event) => {
     event.preventDefault();
@@ -89,6 +99,7 @@ const Login = () => {
         );
       } catch (error) {
         console.log(error);
+        setSignInError('w-p');
       }
     } else {
       try {
@@ -101,6 +112,7 @@ const Login = () => {
         });
       } catch (error) {
         console.log(error);
+        setSignInError('mail-in-use');
       }
     }
   };
@@ -162,9 +174,16 @@ const Login = () => {
                 label="Password"
                 onInput={inputHandle}
                 validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
-                errorText="Ingresá una contraseña válida"
+                errorText="Ingresá una contraseña de 8 o mas caracteres"
               />
             </FormContent>
+            {signInError && (
+              <SpanErrorStyled>
+                {signInError === 'w-p'
+                  ? 'Datos Incorrectos!'
+                  : 'Email ya registrado'}
+              </SpanErrorStyled>
+            )}
             <ContainerButtons>
               <LoginSubmitButton disabled={!formState.isValid}>
                 {isLoginMode ? 'Ingresar' : 'Registrar'}
@@ -177,8 +196,8 @@ const Login = () => {
             <ContainerButtons>
               <span>
                 {isLoginMode
-                  ? 'Ya tenes una cuenta? '
-                  : 'Todavía no estás Registrado? '}
+                  ? 'Todavía no estás Registrado? '
+                  : 'Ya tenes una cuenta? '}
               </span>
               <Alink onClick={switchLoginModeHandle}>
                 {!isLoginMode ? 'Ingresá' : 'Registrar'}

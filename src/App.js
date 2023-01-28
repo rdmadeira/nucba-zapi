@@ -16,7 +16,7 @@ function onAuthStateChange(callback, action) {
     if (userAuth) {
       const userRef = await createUserProfileDocument(userAuth);
       userRef.onSnapshot((snapshot) => {
-        callback(action({ id: snapshot.id, ...snapshot }));
+        callback(action({ id: snapshot.id, ...snapshot.data() }));
       });
     } else {
       callback(action(null));
