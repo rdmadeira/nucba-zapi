@@ -3,18 +3,11 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { LayoutPage, Wrapper } from '../components/UI';
 import { ShippingForm } from '../components/shippingForm/ShippingForm';
-import { COSTO_DE_ENVIO } from '../utils/constants';
 /* import styled from 'styled-components'; */
 
 const Checkout = () => {
   const currentUser = useSelector((store) => store.user.currentUser);
   const navigate = useNavigate();
-
-  const cartItems = useSelector((store) => store.cart.cartItems);
-
-  const subTotal = cartItems.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
-  });
 
   useEffect(() => {
     if (!currentUser) {
@@ -27,7 +20,7 @@ const Checkout = () => {
   return (
     <LayoutPage>
       <Wrapper>
-        <ShippingForm subTotal={subTotal} envio={COSTO_DE_ENVIO}></ShippingForm>
+        <ShippingForm></ShippingForm>
       </Wrapper>
     </LayoutPage>
   );
