@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import logo from '../../assets/nucbazappiintegral.png';
 import Carticon from '../cart/Carticon';
 import { fixed } from '../../styles/utilities';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import userIcon from '../../assets/user.svg';
 import { auth } from '../../firebase/firebase-utils';
 import { UserMenu } from '../userMenu/UserMenu';
+import * as userActions from '../../redux/user/user-actions';
 
 const NavbarStyled = styled.div`
   padding: 10px;
@@ -64,6 +65,11 @@ const LoginButton = styled.button`
 // Este es un componente funcional, que tiene children 'componentes estilizados'
 export const Navbar = () => {
   const currentUser = useSelector((store) => store.user.currentUser);
+  const dispatch = useDispatch();
+
+  const handleToggle = () => {
+    dispatch(userActions.toggleUserMenuHidden());
+  };
   return (
     <NavbarStyled>
       <Link to="/">
@@ -74,15 +80,8 @@ export const Navbar = () => {
         <Divider />
         {currentUser ? (
           <>
-            <UserLogo
-              src={userIcon}
-              onClick={() =>
-                auth.signOut().then(() => {
-                  console.log('user logged out');
-                })
-              }
-            />
-            <UserMenu user={currentUser} />
+            <UserLogo src={userIcon} onClick={handleToggle} />
+            <UserMenu user={currentUser} handleToggle={handleToggle} />
           </>
         ) : (
           <Link to="/login">

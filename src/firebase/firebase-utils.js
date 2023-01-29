@@ -38,7 +38,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 export const createOrderDocument = async (order) => {
   if (!order) return;
-  const orderRef = firestore.doc(`orders/${order.id}`);
+  const orderRef = firestore.doc(`orders/${order.id}`); // se no existe el documento en datos de firebase, la crea
   const snapshot = await orderRef.get();
   if (!snapshot.exists) {
     const createdAt = new Date();

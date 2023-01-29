@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { LayoutPage, Wrapper } from '../components/UI';
 import { ShippingForm } from '../components/shippingForm/ShippingForm';
+import { COSTO_DE_ENVIO } from '../utils/constants';
 /* import styled from 'styled-components'; */
 
-/* const StyledCheckout = styled.div`
-  max-width: 1440px;
-  min-height: 900px;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-`;
-
-const StyledWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: space-around;
-  max-width: 1440px;
-  padding-top: 150px;
-`; */
-
 const Checkout = () => {
+  const currentUser = useSelector((store) => store.user.currentUser);
+  const navigate = useNavigate();
+
+  const cartItems = useSelector((store) => store.cart.cartItems);
+
+  const subTotal = cartItems.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  });
+
+  useEffect(() => {
+    if (!currentUser) {
+      console.log(currentUser);
+      navigate('/login');
+      console.log('object');
+    }
+  });
+
   return (
     <LayoutPage>
       <Wrapper>
-        <ShippingForm></ShippingForm>
+        <ShippingForm subTotal={subTotal} envio={COSTO_DE_ENVIO}></ShippingForm>
       </Wrapper>
     </LayoutPage>
   );

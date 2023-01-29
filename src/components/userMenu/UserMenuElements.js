@@ -7,7 +7,7 @@ export const UserMenuStyled = styled.div`
   flex-direction: column;
   position: absolute;
   top: 135%;
-  right: 0;
+  right: 20px;
   z-index: 12;
   opacity: 1;
   border: 1px solid #c7c7c7;
