@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
+import Resume from './pages/Resume';
+import Orders from './pages/Orders';
 import { auth, createUserProfileDocument } from './firebase/firebase-utils';
 import * as userActions from './redux/user/user-actions';
 
@@ -46,6 +48,8 @@ function App() {
           <Route exact path="/" element={<Home openedFood={openedFood} />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login />} />
+          <Route exact path="/mis-ordenes" element={<Orders />} />
+          <Route exact path="/mis-ordenes/:orderId" element={<Resume />} />
         </Routes>
       </Router>
     </>

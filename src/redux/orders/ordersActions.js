@@ -1,4 +1,4 @@
-import { createOrderDocument } from '../../firebase/firebase-utils';
+import { createOrderDocument, getOrders } from '../../firebase/firebase-utils';
 import { v4 as uuidv4 } from 'uuid';
 
 export const START_ORDER = 'CREATE_ORDER';
@@ -48,9 +48,40 @@ export const createOrder = (orderData) => {
   };
 };
 
+export const purchaseInit = () => ({
+  type: PURCHASE_INIT,
+});
+
 export const fetchOrderSuccess = (orders) => {
   return {
     type: FETCH_ORDERS_SUCCESS,
     orders: orders,
+  };
+};
+
+export const fetchOrderFail = (error) => {
+  return {
+    type: FETCH_ORDERS_FAIL,
+    error: error,
+  };
+};
+
+export const fetchOrderStart = () => {
+  return {
+    type: FETCH_ORDERS_START,
+  };
+};
+
+// Acá de vuelta se utiliza redux-thunk, para retornar una funcion asyncrona para hacer un fetch en firebase database,
+// utilizando getOrders
+export const fetchOrders = (userId) => {
+  return async (dispatch) => {
+    dispatch(fetchOrderStart());
+    try {
+      const fetchedOrders = await getOrders(userId);
+      dispatch(fetchOrderSuccess(fetchedOrders));
+    } catch (err) {
+      dispatch(fetchOrderFail(err));
+    }
   };
 };

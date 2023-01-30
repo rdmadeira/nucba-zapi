@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { nucbazapiRed } from '../../Styles/utilities';
+import { nucbazapiRed } from '../../styles/utilities/colors';
 
 const Container = styled.div`
   display: flex;

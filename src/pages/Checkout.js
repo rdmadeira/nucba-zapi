@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { LayoutPage, Wrapper } from '../components/UI';
 import { ShippingForm } from '../components/shippingForm/ShippingForm';
 /* import styled from 'styled-components'; */
+import {
+  CheckoutContainerStyled,
+  CheckoutIllustration,
+  CheckoutImage,
+  CheckoutGridContainer,
+} from './CheckoutElements';
+
+import CheckoutBackground from '../assets/checkout.jpg';
+import CheckoutIllustrationSource from '../assets/checkoutIllustration.png';
 
 const Checkout = () => {
   const currentUser = useSelector((store) => store.user.currentUser);
@@ -11,18 +20,17 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!currentUser) {
-      console.log(currentUser);
+      /* console.log(currentUser); */
       navigate('/login');
-      console.log('object');
     }
   });
 
   return (
-    <LayoutPage>
-      <Wrapper>
-        <ShippingForm></ShippingForm>
-      </Wrapper>
-    </LayoutPage>
+    <CheckoutContainerStyled img={CheckoutBackground}>
+      <CheckoutGridContainer>
+        <ShippingForm />
+      </CheckoutGridContainer>
+    </CheckoutContainerStyled>
   );
 };
 

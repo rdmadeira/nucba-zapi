@@ -1,7 +1,7 @@
 // import * as userActions from '../../redux/user/user-actions';
 import { useSelector } from 'react-redux';
 import { auth } from '../../firebase/firebase-utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   UserMenuStyled,
@@ -13,6 +13,7 @@ import {
 
 export const UserMenu = ({ user, handleToggle }) => {
   const { hiddenMenu } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   return (
     <>
       {!hiddenMenu && <Shadow onClick={handleToggle} />}
@@ -20,11 +21,13 @@ export const UserMenu = ({ user, handleToggle }) => {
         <UserMenuStyled>
           <WelcomeTitle>Hola {user.displayName}</WelcomeTitle>
           <MenuOptions>
-            <MenuOptionElement>Mis Ordenes</MenuOptionElement>
+            <Link to="mis-ordenes" onClick={handleToggle}>
+              <MenuOptionElement>Mis Ordenes</MenuOptionElement>
+            </Link>
             <MenuOptionElement
               onClick={() =>
                 auth.signOut().then(() => {
-                  console.log('user logged out');
+                  navigate('/');
                 })
               }
             >

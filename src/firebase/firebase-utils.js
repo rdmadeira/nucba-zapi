@@ -64,13 +64,15 @@ export const createOrderDocument = async (order) => {
 };
 
 export const getOrders = async (userId) => {
-  const orderRef = await firestore
+  const orderRef = await firestore // crea una promesa
     .collection('orders')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc');
+    .where('userId', '==', userId) // funcion que crea una condicion para los collections pedidos, en este caso, un filtro de ordenes de este user
+    .orderBy('createdAt', 'desc'); // funcion que ordena por el parametro pasado, y por crescente o decrescente. Hay que crear indice en firebase para esto funcionar.
+  // El createdAt, pasado a este metodo debe estar especificado en el indice y habilitado. La habilitacion lleva un tiempo.
 
-  let orders = await orderRef
-    .get()
+  let orders = await orderRef // como es una promesa, pone el await.
+    .get() // Crea otra promesa, con el then retornando la respuesta - https://firebase.google.com/docs/firestore/query-data/get-data?hl=es-419#web-version-8_6
+    // Habria que actualizar los metodos a la version modular v9 de firebase. Estoy usando todavía la version compat de v9
     .then(function (querySnapshot) {
       let orders = [];
       querySnapshot.forEach(function (doc) {
