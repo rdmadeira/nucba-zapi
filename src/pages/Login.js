@@ -146,7 +146,7 @@ const Login = () => {
   console.log(formState.inputs);
 
   const signInWithGoogleHandle = () => {
-    setSignInError('false');
+    setSignInError(false);
     signInWithGoogle();
   };
   return (
@@ -193,7 +193,7 @@ const Login = () => {
               <LoginSubmitButton disabled={!formState.isValid}>
                 {isLoginMode ? 'Ingresar' : 'Registrar'}
               </LoginSubmitButton>
-              <GoogleButton onClick={signInWithGoogleHandle}>
+              <GoogleButton type="button" onClick={signInWithGoogleHandle}>
                 <GoogleIcon src={GoogleLogo} />
                 <p>Login con Google</p>
               </GoogleButton>

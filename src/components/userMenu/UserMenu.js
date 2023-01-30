@@ -1,5 +1,5 @@
 // import * as userActions from '../../redux/user/user-actions';
-import { useSelector } from 'react-redux';
+import { useSelector /* , useDispatch */ } from 'react-redux';
 import { auth } from '../../firebase/firebase-utils';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ import {
 export const UserMenu = ({ user, handleToggle }) => {
   const { hiddenMenu } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
   return (
     <>
       {!hiddenMenu && <Shadow onClick={handleToggle} />}

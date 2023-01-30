@@ -6,6 +6,7 @@ import {
   FETCH_ORDERS_START,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAIL,
+  ORDERS_INIT,
 } from './ordersActions';
 
 const INITIAL_STATE = {
@@ -61,6 +62,8 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         orders: [...action.orders],
       };
+    case ORDERS_INIT:
+      return { ...INITIAL_STATE };
 
     default:
       return state;

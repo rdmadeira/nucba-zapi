@@ -8,6 +8,7 @@ export const PURCHASE_INIT = 'PURCHASE_INIT';
 export const FETCH_ORDERS_SUCCESS = 'FETCH_ORDERS_SUCCESS';
 export const FETCH_ORDERS_FAIL = 'FETCH_ORDERS_FAIL';
 export const FETCH_ORDERS_START = 'FETCH_ORDERS_START';
+export const ORDERS_INIT = 'ORDERS_INIT';
 
 export const createOrderSuccess = (orderData) => ({
   type: CREATE_ORDER_SUCCES,
@@ -85,3 +86,5 @@ export const fetchOrders = (userId) => {
     }
   };
 };
+
+export const ordersInit = () => ({ type: ORDERS_INIT });
