@@ -46,7 +46,8 @@ const Menu = ({ setOpenFood }) => {
           </Tagcard>
         ))}
       </Tagsmenu>
-      {/* Con esta opcion Object.keys y key, tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
+
+      {/* Con esta opcion: Object.keys.map(key), tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
       Object.entries devuelve un array, cuyos elementos son array conteniendo la key y el array de foods.
       Object.keys: [key1, key2, key3,...]
       Object.entries: [[key1, foods], [key2, food2], [key3, food3],...]
@@ -62,12 +63,12 @@ const Menu = ({ setOpenFood }) => {
           </>
         );
       })} */}
-      {Object.entries(foods).map(([key, foods]) => {
+      {Object.entries(foods).map(([key, foodsArray]) => {
         return (
           <>
             <FoodTitle>{key}</FoodTitle>
             <FoodGrid>
-              {foods.map((food) => (
+              {foodsArray.map((food) => (
                 <Food img={food.img} onClick={() => setOpenFood(food)}>
                   <FoodLabel>
                     <div>{food.name}</div>
