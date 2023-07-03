@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react';
+// React-Query - new version (tan-stack):
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { GlobalStyle } from './styles/GlobalStyle';
 import { Navbar } from './components/navbar/Navbar';
+
+// Custom hook:
 import { useOpenFood } from './hooks/useOpenFood';
+
 import { Order } from './components/orders/Order';
-import { /* useSelector, */ useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Checkout from './pages/Checkout';
@@ -14,6 +21,9 @@ import { auth, createUserProfileDocument } from './firebase/firebase-utils';
 import * as userActions from './redux/user/user-actions';
 import * as ordersActions from './redux/orders/ordersActions';
 
+// Tanstack/ React-query:
+const queryClient = new QueryClient();
+
 function onAuthStateChange(callback, action, action2) {
   auth.onAuthStateChanged(async (userAuth) => {
     if (userAuth) {
@@ -23,7 +33,6 @@ function onAuthStateChange(callback, action, action2) {
       });
 
       callback(action2(userAuth.auth.currentUser?.uid));
-      console.log(userAuth.auth.currentUser.uid);
     } else {
       callback(action(null));
       callback(ordersActions.ordersInit());
@@ -49,7 +58,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Router>
         <GlobalStyle />
         <Navbar />
@@ -62,7 +71,8 @@ function App() {
           <Route exact path="/mis-ordenes/:orderId" element={<Resume />} />
         </Routes>
       </Router>
-    </>
+      <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
+    </QueryClientProvider>
   );
 }
 

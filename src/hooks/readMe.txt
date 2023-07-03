@@ -1,0 +1,1 @@
+1- Los hooks para fetcheo de entidades a la api del backend, se recomienda hacer un hook para cada entidad a consultar:

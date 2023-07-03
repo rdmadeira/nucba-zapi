@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState /* , useEffect */ } from 'react';
 import styled from 'styled-components';
 import { formatPriceARS } from '../../utils';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
 import { Tagsmenu, Tagcard, Tagimg } from './TagMenu';
-import { useSelector } from 'react-redux';
+
+import useCategories from '../../hooks/useCategories';
+import useProducts from '../../hooks/useProducts';
 
 const MenuStyled = styled.div`
   height: 1000px;
@@ -19,32 +21,47 @@ const FoodTitle = styled.h3`
 `;
 
 const Menu = ({ setOpenFood }) => {
-  const [section, setSection] = useState(null);
-  let foods = useSelector((store) => store.products.foods);
-  const categories = useSelector((store) => store.categories.categories);
+  let categoriesData = useCategories();
+  let productsData = useProducts();
 
-  if (section) {
+  let categories = categoriesData?.data?.data?.result;
+  let products = productsData?.data?.result;
+  console.log(categories, products);
+
+  const [sectionId, setSectionId] = useState(null);
+
+  /* let categories = useSelector((store) => store.categories.categories); */
+
+  /*   if (section) {
     foods = { [section]: foods[section] };
-  }
+  } */
+
+  /* useEffect(() => {
+    const getProducts = async () => {
+      let products = await productsData?.data?.result;
+    };
+    getProducts();
+  }, [productsData]); */
 
   return (
     <MenuStyled>
       <h2>Menu</h2>
       <Tagsmenu>
-        {section && (
-          <Tagcard onClick={() => setSection(null)}>
+        {sectionId && (
+          <Tagcard onClick={() => setSectionId(null)}>
             <p>Todos</p>
           </Tagcard>
         )}
-        {categories.map((category) => (
-          <Tagcard
-            onClick={() => setSection(category.section)}
-            selected={category.section === section ? true : false}
-          >
-            <Tagimg img={category.imgTag} />
-            <p>{category.section}</p>
-          </Tagcard>
-        ))}
+        {categories &&
+          categories.map((category) => (
+            <Tagcard
+              onClick={() => setSectionId(category.id)}
+              selected={category.category === sectionId ? true : false}
+            >
+              <Tagimg img={category.imgTag} />
+              <p>{category.category}</p>
+            </Tagcard>
+          ))}
       </Tagsmenu>
 
       {/* Con esta opcion: Object.keys.map(key), tenemos que hacer doble map, porque Object.keys devuelve un array de las keys en string. Habria que iterar de nuevo usando maps para cada key. En cambio, 
@@ -63,23 +80,53 @@ const Menu = ({ setOpenFood }) => {
           </>
         );
       })} */}
-      {Object.entries(foods).map(([key, foodsArray]) => {
-        return (
-          <>
-            <FoodTitle>{key}</FoodTitle>
-            <FoodGrid>
-              {foodsArray.map((food) => (
-                <Food img={food.img} onClick={() => setOpenFood(food)}>
-                  <FoodLabel>
-                    <div>{food.name}</div>
-                    <div>{formatPriceARS(food.price)}</div>
-                  </FoodLabel>
-                </Food>
-              ))}
-            </FoodGrid>
-          </>
-        );
-      })}
+      {sectionId ? (
+        <>
+          <FoodTitle>
+            {categories.find((cat) => cat.id === sectionId).category}
+          </FoodTitle>
+          <FoodGrid>
+            {products
+              ?.filter((product) => product.categoryId === sectionId)
+              .map((product) => {
+                return (
+                  <Food
+                    img={product.imgUrl}
+                    onClick={() => setOpenFood(product.name)}
+                  >
+                    <FoodLabel>
+                      <div>{product.name}</div>
+                      <div>{formatPriceARS(product.price)}</div>
+                    </FoodLabel>
+                  </Food>
+                );
+              })}
+          </FoodGrid>
+        </>
+      ) : (
+        categories?.map((category) => {
+          return (
+            <>
+              <FoodTitle>{category.category}</FoodTitle>
+              <FoodGrid>
+                {products
+                  ?.filter((prod) => prod.categoryId === category.id)
+                  .map((product) => (
+                    <Food
+                      img={product.imgUrl}
+                      onClick={() => setOpenFood(product.name)}
+                    >
+                      <FoodLabel>
+                        <div>{product.name}</div>
+                        <div>{formatPriceARS(product.price)}</div>
+                      </FoodLabel>
+                    </Food>
+                  ))}
+              </FoodGrid>
+            </>
+          );
+        })
+      )}
     </MenuStyled>
   );
 };
