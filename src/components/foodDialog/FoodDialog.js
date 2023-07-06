@@ -91,7 +91,7 @@ const FoodDialogContainer = ({ openFood, setOpenFood }) => {
     <>
       <DialogShadow onClick={handlerClose} />
       <Dialog>
-        <DialogBanner img={openFood.img}>
+        <DialogBanner img={openFood.imgUrl}>
           <DialogBannerName>{openFood.name}</DialogBannerName>
         </DialogBanner>
         <DialogContent>

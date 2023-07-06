@@ -1,4 +1,4 @@
-import React, { useState /* , useEffect */ } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { formatPriceARS } from '../../utils';
 import { Food, FoodGrid, FoodLabel } from './FoodGrid';
@@ -6,6 +6,7 @@ import { Tagsmenu, Tagcard, Tagimg } from './TagMenu';
 
 import useCategories from '../../hooks/useCategories';
 import useProducts from '../../hooks/useProducts';
+import { Spinner } from '@chakra-ui/react';
 
 const MenuStyled = styled.div`
   height: 1000px;
@@ -21,12 +22,13 @@ const FoodTitle = styled.h3`
 `;
 
 const Menu = ({ setOpenFood }) => {
-  let categoriesData = useCategories();
-  let productsData = useProducts();
+  // ESTADO DEL SERVIDOR!!:
+  let categoriesFetch = useCategories();
+  let productsFetch = useProducts();
+  // UTILIZAR LA RESPUESTA DE LOS CATEGORIES:
 
-  let categories = categoriesData?.data?.data?.result;
-  let products = productsData?.data?.result;
-  console.log(categories, products);
+  let categories = categoriesFetch?.data?.data?.result;
+  let products = productsFetch?.data?.result;
 
   const [sectionId, setSectionId] = useState(null);
 
@@ -35,13 +37,6 @@ const Menu = ({ setOpenFood }) => {
   /*   if (section) {
     foods = { [section]: foods[section] };
   } */
-
-  /* useEffect(() => {
-    const getProducts = async () => {
-      let products = await productsData?.data?.result;
-    };
-    getProducts();
-  }, [productsData]); */
 
   return (
     <MenuStyled>
@@ -52,7 +47,7 @@ const Menu = ({ setOpenFood }) => {
             <p>Todos</p>
           </Tagcard>
         )}
-        {categories &&
+        {categoriesFetch.isSuccess &&
           categories.map((category) => (
             <Tagcard
               onClick={() => setSectionId(category.id)}
@@ -82,26 +77,32 @@ const Menu = ({ setOpenFood }) => {
       })} */}
       {sectionId ? (
         <>
-          <FoodTitle>
-            {categories.find((cat) => cat.id === sectionId).category}
-          </FoodTitle>
-          <FoodGrid>
-            {products
-              ?.filter((product) => product.categoryId === sectionId)
-              .map((product) => {
-                return (
-                  <Food
-                    img={product.imgUrl}
-                    onClick={() => setOpenFood(product.name)}
-                  >
-                    <FoodLabel>
-                      <div>{product.name}</div>
-                      <div>{formatPriceARS(product.price)}</div>
-                    </FoodLabel>
-                  </Food>
-                );
-              })}
-          </FoodGrid>
+          {categoriesFetch.isLoading || productsFetch.isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <FoodTitle>
+                {categories.find((cat) => cat.id === sectionId).category}
+              </FoodTitle>
+              <FoodGrid>
+                {products
+                  ?.filter((product) => product.categoryId === sectionId)
+                  .map((product) => {
+                    return (
+                      <Food
+                        img={product.imgUrl}
+                        onClick={() => setOpenFood(product)}
+                      >
+                        <FoodLabel>
+                          <div>{product.name}</div>
+                          <div>{formatPriceARS(product.price)}</div>
+                        </FoodLabel>
+                      </Food>
+                    );
+                  })}
+              </FoodGrid>
+            </>
+          )}
         </>
       ) : (
         categories?.map((category) => {
@@ -114,7 +115,7 @@ const Menu = ({ setOpenFood }) => {
                   .map((product) => (
                     <Food
                       img={product.imgUrl}
-                      onClick={() => setOpenFood(product.name)}
+                      onClick={() => setOpenFood(product)}
                     >
                       <FoodLabel>
                         <div>{product.name}</div>

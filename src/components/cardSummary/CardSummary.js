@@ -70,7 +70,7 @@ export const CardSummary = ({ formIsValid, envio, subTotal }) => {
             <h4>{formatPriceARS(subTotal + envio)}</h4>
           </TotalCard>
           <CustomButton w="100%" m="0px" disabled={!formIsValid}>
-            Pagar
+            CONFIRMAR PEDIDO!
           </CustomButton>
         </CardSummaryContent>
       </CardSummaryStyled>
