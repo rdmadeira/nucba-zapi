@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
+
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -17,12 +19,10 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from '../utils';
-import {
-  auth,
-  signInWithGoogle,
-  createUserProfileDocument,
-} from '../firebase/firebase-utils';
+import { signInWithGoogle } from '../firebase/firebase-utils';
 import { nucbazapiRed } from '../styles/utilities';
+
+import axios from 'axios';
 
 const ContainerButtons = styled.div`
   display: flex;
@@ -64,10 +64,30 @@ const SpanErrorStyled = styled.span`
 
 const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [signInError, setSignInError] = useState(undefined);
+  /* const [signInError, setSignInError] = useState(undefined); */
 
   const currentUser = useSelector((store) => store.user.currentUser);
   const navigate = useNavigate();
+
+  const { data, isSuccess, isLoading, isError, mutate, error, reset } =
+    useMutation({
+      mutationFn: async (vars) => {
+        const myPostAxios = axios.create({
+          baseURL: 'http://localhost:8000/api/v1/auth/',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        });
+
+        // interceptor:
+        myPostAxios.interceptors.response.use(
+          (response) => response.data.result
+        );
+
+        return myPostAxios.request('signup', { data: vars }); // Faltaba el error, por eso no entraba en onError de useMutation!!
+      },
+    });
 
   useEffect(() => {
     if (currentUser) {
@@ -85,12 +105,33 @@ const Login = () => {
       isValid: false,
     },
   });
-  useEffect(() => {
-    setSignInError(false);
-  }, [formState.inputs]);
 
-  const submitHandle = async (event) => {
+  useEffect(() => {
+    reset();
+  }, [formState.inputs, reset]);
+
+  const submitSignUpHandle = async (event) => {
     event.preventDefault();
+    mutate(
+      {
+        name: formState.inputs.displayName.value,
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+      },
+      {
+        onError: (error) => console.log('error', error),
+        onSuccess: (data) => {
+          const authDataString = JSON.stringify({
+            id: data.userId,
+            token: data.token,
+          });
+          localStorage.setItem('authData', authDataString);
+          alert(`${data.name}, succesfully registered account!`);
+          navigate('/');
+        },
+      }
+    );
+    /* event.preventDefault();
     if (isLoginMode) {
       try {
         await auth.signInWithEmailAndPassword(
@@ -103,18 +144,23 @@ const Login = () => {
       }
     } else {
       try {
-        const { user } = await auth.createUserWithEmailAndPassword(
+       
+          const { user } = await auth.createUserWithEmailAndPassword(
           formState.inputs.email.value,
           formState.inputs.password.value
         );
         await createUserProfileDocument(user, {
           displayName: formState.inputs.displayName.value,
         });
+      } 
       } catch (error) {
-        console.log(error);
-        setSignInError('mail-in-use');
-      }
-    }
+         console.log(error);
+        setSignInError('mail-in-use'); 
+      } */
+  };
+
+  const submitLoginHandle = async (e) => {
+    e.preventDefault();
   };
 
   const switchLoginModeHandle = () => {
@@ -143,16 +189,15 @@ const Login = () => {
     }
     setIsLoginMode((previous) => !previous);
   };
-  console.log(formState.inputs);
 
   const signInWithGoogleHandle = () => {
-    setSignInError(false);
+    reset();
     signInWithGoogle();
   };
   return (
     <LayoutPage>
       <Wrapper>
-        <form onSubmit={submitHandle}>
+        <form onSubmit={!isLoginMode ? submitSignUpHandle : submitLoginHandle}>
           <FormStyled>
             <FormContent>
               {!isLoginMode && (
@@ -182,13 +227,13 @@ const Login = () => {
                 errorText="Ingresá una contraseña de 8 o mas caracteres"
               />
             </FormContent>
-            {signInError && (
-              <SpanErrorStyled>
-                {signInError === 'w-p'
-                  ? 'Datos Incorrectos!'
-                  : 'Email ya registrado'}
-              </SpanErrorStyled>
-            )}
+            <SpanErrorStyled>
+              {isError &&
+                error.response?.data?.errors.map((error) => {
+                  return error.message + '\n';
+                })}
+            </SpanErrorStyled>
+
             <ContainerButtons>
               <LoginSubmitButton disabled={!formState.isValid}>
                 {isLoginMode ? 'Ingresar' : 'Registrar'}

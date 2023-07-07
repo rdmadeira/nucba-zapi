@@ -20,6 +20,7 @@ import Orders from './pages/Orders';
 import { auth, createUserProfileDocument } from './firebase/firebase-utils';
 import * as userActions from './redux/user/user-actions';
 import * as ordersActions from './redux/orders/ordersActions';
+import { useAuth } from './hooks/useAuth';
 
 // Tanstack/ React-query:
 const queryClient = new QueryClient();
@@ -43,10 +44,13 @@ function onAuthStateChange(callback, action, action2) {
 function App() {
   const openedFood = useOpenFood();
   // const currentUser = useSelector((store) => store.user.currentUser);
-  const dispatch = useDispatch();
+  /* const dispatch = useDispatch(); */
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChange(
+  const currentUser = useAuth();
+
+  useEffect(
+    () => {
+      /* const unsubscribe = onAuthStateChange(
       dispatch,
       userActions.setCurrentuser,
       ordersActions.fetchOrders
@@ -54,8 +58,10 @@ function App() {
 
     return () => {
       unsubscribe();
-    };
-  }, [dispatch]);
+    }; */
+    },
+    [] /* [dispatch] */
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
