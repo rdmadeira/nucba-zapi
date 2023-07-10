@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { useAuth } from '../hooks/useAuth';
 
-import { useSelector } from 'react-redux';
+/* import { useSelector } from 'react-redux'; */
 import { useNavigate } from 'react-router-dom';
 import {
   Wrapper,
@@ -65,8 +66,8 @@ const SpanErrorStyled = styled.span`
 const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   /* const [signInError, setSignInError] = useState(undefined); */
-
-  const currentUser = useSelector((store) => store.user.currentUser);
+  const currentUser = useAuth();
+  /* const currentUser = useSelector((store) => store.user.currentUser); */
   const navigate = useNavigate();
 
   const { data, isSuccess, isLoading, isError, mutate, error, reset } =
@@ -85,12 +86,15 @@ const Login = () => {
           (response) => response.data.result
         );
 
-        return myPostAxios.request('signup', { data: vars }); // Faltaba el error, por eso no entraba en onError de useMutation!!
+        return vars.signUp
+          ? myPostAxios.request('signup', { data: vars })
+          : myPostAxios.request('login', { data: vars }); // Faltaba el error, por eso no entraba en onError de useMutation!!
       },
     });
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser.data) {
+      console.log(currentUser.data);
       navigate(-1);
     }
   }, [currentUser, navigate]);
@@ -117,6 +121,7 @@ const Login = () => {
         name: formState.inputs.displayName.value,
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
+        signUp: true,
       },
       {
         onError: (error) => console.log('error', error),
@@ -127,7 +132,6 @@ const Login = () => {
           });
           localStorage.setItem('authData', authDataString);
           alert(`${data.name}, succesfully registered account!`);
-          navigate('/');
         },
       }
     );
@@ -161,6 +165,26 @@ const Login = () => {
 
   const submitLoginHandle = async (e) => {
     e.preventDefault();
+    mutate(
+      {
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+        signUp: false,
+      },
+      {
+        onSuccess: (data, vars) => {
+          const authDataString = JSON.stringify({
+            id: data.userId,
+            token: data.token,
+          });
+          localStorage.setItem('authData', authDataString);
+          console.log(authDataString);
+
+          navigate(0);
+        },
+        onError: (error) => console.log('error', error),
+      }
+    );
   };
 
   const switchLoginModeHandle = () => {

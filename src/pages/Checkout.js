@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+/* import { useSelector } from 'react-redux'; */
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 /* import { LayoutPage, Wrapper } from '../components/UI'; */
 import { ShippingForm } from '../components/shippingForm/ShippingForm';
 /* import styled from 'styled-components'; */
@@ -16,12 +17,12 @@ import CheckoutBackground from '../assets/checkout.jpg';
 
 const Checkout = () => {
   // PARA HACER: NO USAR USESELECTOR DE REDUX, Y SÍ REACT-QUERY, POR MEDIO DEL HOOK DEL CONTEXT AUTH:
-  const currentUser = useSelector((store) => store.user.currentUser);
+  const currentUser = useAuth();
+  console.log(currentUser);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser) {
-      /* console.log(currentUser); */
+    if (!currentUser.data) {
       navigate('/login');
     }
   });
@@ -29,7 +30,7 @@ const Checkout = () => {
   return (
     <CheckoutContainerStyled img={CheckoutBackground}>
       <CheckoutGridContainer>
-        <ShippingForm />
+        <ShippingForm currentUser={currentUser} />
       </CheckoutGridContainer>
     </CheckoutContainerStyled>
   );

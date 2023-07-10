@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // React-Query - new version (tan-stack):
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { GlobalStyle } from './styles/GlobalStyle';
 import { Navbar } from './components/navbar/Navbar';
@@ -11,7 +10,13 @@ import { useOpenFood } from './hooks/useOpenFood';
 
 import { Order } from './components/orders/Order';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import Home from './pages/Home';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
@@ -23,9 +28,8 @@ import * as ordersActions from './redux/orders/ordersActions';
 import { useAuth } from './hooks/useAuth';
 
 // Tanstack/ React-query:
-const queryClient = new QueryClient();
 
-function onAuthStateChange(callback, action, action2) {
+/* function onAuthStateChange(callback, action, action2) {
   auth.onAuthStateChanged(async (userAuth) => {
     if (userAuth) {
       const userRef = await createUserProfileDocument(userAuth);
@@ -39,32 +43,16 @@ function onAuthStateChange(callback, action, action2) {
       callback(ordersActions.ordersInit());
     }
   });
-}
+} */
 
 function App() {
   const openedFood = useOpenFood();
   // const currentUser = useSelector((store) => store.user.currentUser);
+
   /* const dispatch = useDispatch(); */
 
-  const currentUser = useAuth();
-
-  useEffect(
-    () => {
-      /* const unsubscribe = onAuthStateChange(
-      dispatch,
-      userActions.setCurrentuser,
-      ordersActions.fetchOrders
-    );
-
-    return () => {
-      unsubscribe();
-    }; */
-    },
-    [] /* [dispatch] */
-  );
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Router>
         <GlobalStyle />
         <Navbar />
@@ -78,7 +66,7 @@ function App() {
         </Routes>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
-    </QueryClientProvider>
+    </>
   );
 }
 

@@ -83,7 +83,7 @@ const FoodDialogContainer = ({ openFood, setOpenFood }) => {
     setOpenFood(null);
   };
 
-  const addToOrders = () => {
+  const addToCart = () => {
     dispatch(cartActions.addItem(openFood));
     handlerClose();
   };
@@ -98,7 +98,7 @@ const FoodDialogContainer = ({ openFood, setOpenFood }) => {
           <p>{openFood.description}</p>
         </DialogContent>
         <DialogFooter>
-          <Confirmbutton onClick={addToOrders}>
+          <Confirmbutton onClick={addToCart}>
             Agregar {formatPriceARS(openFood.price)}
           </Confirmbutton>
         </DialogFooter>

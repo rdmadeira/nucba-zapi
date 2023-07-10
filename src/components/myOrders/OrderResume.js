@@ -1,6 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+/* import { useSelector } from 'react-redux'; */
 import { useParams } from 'react-router-dom';
+import useOrderItems from '../../hooks/useOrderItems';
+import useOrders from '../../hooks/useOrders';
+import useProducts from '../../hooks/useProducts';
 import { CustomButton } from '../UI';
 
 import {
@@ -24,11 +27,17 @@ import {
 
 export const OrderResume = () => {
   let { orderId } = useParams(); // captura el orderId especificado en la ruta del elemento Resume, en App.js
-  let { orders } = useSelector((state) => state.orders);
+  /* let { orders } = useSelector((state) => state.orders); */
+  let order = useOrders(orderId);
+  let orderItems = useOrderItems(orderId);
+  console.log(orderItems);
 
-  let [order] = orders.filter((order) => order.id === orderId);
+  const completeOrder = {
+    ...order?.data?.result,
+    OrderItems: orderItems?.data?.result,
+  };
 
-  console.log(order);
+  console.log(completeOrder); //yes!!
 
   return (
     <Container>
@@ -39,27 +48,33 @@ export const OrderResume = () => {
           </VolverButtonStyled>
           <TitleContainerStyled>
             <h3>Resumen</h3>
-            <p>Orden: {orderId}</p>
+            <p>Pedido: {orderId}</p>
           </TitleContainerStyled>
           <StatusContainerStyled>
-            <Status type={order.status}>{order.status}</Status>
+            <Status type={completeOrder?.status?.state}>
+              {/* Hacer el request por el statusId */}
+              {
+                completeOrder?.status
+                  ?.state /* Hacer el request por el statusId */
+              }
+            </Status>
           </StatusContainerStyled>
         </HeaderResume>
         <ProductResume>
           <h3>Productos</h3>
           <ProductUl>
-            {order.items.map((item) => (
+            {completeOrder?.OrderItems?.map((item) => (
               <ProductLi>
-                <ItemImg img={item.img} />
+                <ItemImg img={item.product.imgUrl} />
                 <InfoProducts>
                   <p>
-                    {item.name} - {item.description}
+                    {item.product.name} - {item.product.description}
                   </p>
                 </InfoProducts>
 
                 <PriceResume>
-                  <Quantity>{item.quantity}U</Quantity>
-                  <strong>${item.price}</strong>
+                  <Quantity>{item.quantity} x</Quantity>
+                  <strong>${item.unityPrice}</strong>
                 </PriceResume>
               </ProductLi>
             ))}
@@ -71,12 +86,12 @@ export const OrderResume = () => {
             <CostLi>
               <span>Costo de los productos </span>
 
-              <span>${order.subtotal}</span>
+              <span>${completeOrder?.subTotal}</span>
             </CostLi>
             <CostLi>
               <span>Costo de envío </span>
 
-              <span>${order.shippingPrice}</span>
+              <span>${completeOrder?.ShippingPrice}</span>
             </CostLi>
             <CostLi>
               <span>
@@ -84,7 +99,7 @@ export const OrderResume = () => {
               </span>
 
               <span>
-                <strong>${order.total}</strong>
+                <strong>${completeOrder?.total}</strong>
               </span>
             </CostLi>
           </ProductUl>

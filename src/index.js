@@ -7,16 +7,20 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { AxiosProvider } from './contexts/AxiosContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <AxiosProvider>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </AxiosProvider>
+  <QueryClientProvider client={queryClient}>
+    <AxiosProvider>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </AxiosProvider>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

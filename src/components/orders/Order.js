@@ -49,7 +49,7 @@ const OrderItem = styled.div`
 const ItemImg = styled.div`
   width: 46px;
   height: 46px;
-  background-image: ${({ img }) => `url(${img})`};
+  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
   background-size: cover;
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@ export const Order = () => {
             {cartItems.map((cartItem) => (
               <OrderContainer>
                 <OrderItem>
-                  <ItemImg img={cartItem.img} />
+                  <ItemImg imgUrl={cartItem.imgUrl} />
                   <div>
                     <div>{cartItem.name}</div>
                     {formatPriceARS(cartItem.price * cartItem.quantity)}

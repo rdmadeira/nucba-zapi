@@ -6,6 +6,7 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@mercadopago/sdk-react": "^0.0.12",
     "@reduxjs/toolkit": "^1.9.0",
     "@tanstack/react-query-devtools": "^4.29.19",
     "@testing-library/jest-dom": "^5.16.5",

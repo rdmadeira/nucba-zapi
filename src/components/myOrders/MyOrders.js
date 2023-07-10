@@ -19,6 +19,11 @@ import {
 } from './myOrdersElements';
 
 export const MyOrders = ({ orders }) => {
+  /* console.log(
+    'typeof orders.result[0].createdAt',
+    typeof orders.result[0].createdAt
+  ); */
+
   return (
     <Container>
       <OrderHistory>
@@ -32,32 +37,39 @@ export const MyOrders = ({ orders }) => {
           </OrderTitle>
 
           <div>
-            {orders.map((order) => (
-              <OrderContent>
-                <OrderDetails>
-                  <OrderUl>
-                    <OrderLi>
-                      <OrderSpan>Fecha:</OrderSpan>
-                      {formatDate(new Date(order.createdAt.seconds))}
-                    </OrderLi>
-                    <OrderLi>
-                      <OrderSpan>Total:</OrderSpan>
-                      {formatPriceARS(order.total)}
-                    </OrderLi>
-                  </OrderUl>
-                  <StatusContainerStyled>
-                    <Status type={order.status}>{order.status}</Status>
-                  </StatusContainerStyled>
-                  <Flex>
-                    <Link to={`${order.id}`}>
-                      <CustomButton w="150px" m="0">
-                        Ver resumen
-                      </CustomButton>
-                    </Link>
-                  </Flex>
-                </OrderDetails>
-              </OrderContent>
-            ))}
+            {orders?.result?.length > 0 ? (
+              orders?.result?.map((order) => (
+                <OrderContent key={order.id}>
+                  <OrderDetails>
+                    <OrderUl>
+                      <OrderLi>
+                        <OrderSpan>Fecha:</OrderSpan>
+                        {formatDate(new Date(order.createdAt))}
+                      </OrderLi>
+                      <OrderLi>
+                        <OrderSpan>Total:</OrderSpan>
+                        {formatPriceARS(order.total)}
+                      </OrderLi>
+                    </OrderUl>
+                    <StatusContainerStyled>
+                      <Status type={order.status.state}>
+                        {order.status.state}
+                      </Status>
+                    </StatusContainerStyled>
+                    <Flex>
+                      <Link to={`${order.id}`}>
+                        <CustomButton w="150px" m="0">
+                          Ver resumen
+                        </CustomButton>
+                      </Link>
+                    </Flex>
+                  </OrderDetails>
+                </OrderContent>
+              ))
+            ) : (
+              <OrderDetails>No tenes Ordenes</OrderDetails>
+            )}
+            {}
           </div>
         </Wrapper>
       </OrderHistory>

@@ -9,6 +9,7 @@ import userIcon from '../../assets/user.svg';
 import { auth } from '../../firebase/firebase-utils';
 import { UserMenu } from '../userMenu/UserMenu';
 import * as userActions from '../../redux/user/user-actions';
+import { useAuth } from '../../hooks/useAuth';
 
 const NavbarStyled = styled.div`
   padding: 10px;
@@ -64,7 +65,9 @@ const LoginButton = styled.button`
 
 // Este es un componente funcional, que tiene children 'componentes estilizados'
 export const Navbar = () => {
-  const currentUser = useSelector((store) => store.user.currentUser);
+  const currentUserData = useAuth();
+
+  const currentUser = currentUserData.data?.result;
   const dispatch = useDispatch();
 
   const handleToggle = () => {

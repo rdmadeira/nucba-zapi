@@ -8,10 +8,13 @@ import { MyOrders } from '../components/myOrders/MyOrders';
 import { CheckoutContainerStyled } from './OrdersElements';
 
 import CheckoutBackground from '../assets/checkout.jpg';
+import useOrders from '../hooks/useOrders';
 
 const Orders = () => {
+  const orders = useOrders();
+
   /*   const currentUser = useSelector((state) => state.user.currentUser);
-   */ let { orders } = useSelector((state) => state.orders);
+   */ /* let { orders } = useSelector((state) => state.orders); */
   /* const navigate = useNavigate(); */
   /*   const dispatch = useDispatch();
    */
@@ -29,7 +32,7 @@ const Orders = () => {
 
   return (
     <CheckoutContainerStyled img={CheckoutBackground}>
-      <MyOrders orders={orders} />
+      <MyOrders orders={orders.data} />
     </CheckoutContainerStyled>
   );
 };

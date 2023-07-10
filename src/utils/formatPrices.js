@@ -5,8 +5,10 @@ export const formatPriceARS = (price) => {
   }).format(price);
 };
 
-export const formatDate = (seconds) => {
-  const fecha = new Date(seconds * 1000);
+export const formatDate = (string) => {
+  const date = new Date(string);
+
+  const fecha = new Date(date);
   const mes = fecha.getMonth();
   const dia = fecha.getDate();
   const year = fecha.getFullYear();

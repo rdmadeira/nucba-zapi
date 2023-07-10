@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { CustomButton } from '../UI/CustomButton';
 import { formatPriceARS } from '../../utils';
+import { Spinner } from '../UI/Spinner';
+import { Wallet, initMercadoPago } from '@mercadopago/sdk-react';
+
+initMercadoPago('APP_USR-19b9fa39-94f5-4bcd-bb70-36fde9b1c640');
 
 const CardContainer = styled.div`
   max-width: 660px;
@@ -49,9 +53,15 @@ const TotalCard = styled.div`
   padding: 10px;
 `;
 
-export const CardSummary = ({ formIsValid, envio, subTotal }) => {
+export const CardSummary = ({
+  formIsValid,
+  envio,
+  subTotal,
+  preferenceId,
+  isLoadingGeneratePreference,
+}) => {
   return (
-    <CardContainer>
+    <CardContainer style={{ opacity: isLoadingGeneratePreference ? 0.4 : 1 }}>
       <CardSummaryStyled>
         <CardSummaryContent>
           <UlCard>
@@ -69,9 +79,33 @@ export const CardSummary = ({ formIsValid, envio, subTotal }) => {
             <h4>Total</h4>
             <h4>{formatPriceARS(subTotal + envio)}</h4>
           </TotalCard>
-          <CustomButton w="100%" m="0px" disabled={!formIsValid}>
-            CONFIRMAR PEDIDO!
+          <CustomButton
+            w="100%"
+            m="0px"
+            disabled={
+              !formIsValid || isLoadingGeneratePreference || preferenceId
+            }
+          >
+            {preferenceId ? 'PEDIDO CONFIRMADO!' : 'CONFIRMAR PEDIDO!'}
           </CustomButton>
+          {isLoadingGeneratePreference && <Spinner />}
+          {preferenceId && (
+            <Wallet
+              /* onSubmit={() => dispatch(cartActions.clearCart())} */
+              initialization={{
+                preferenceId: preferenceId,
+                redirectMode: 'modal',
+              }}
+              customization={{
+                texts: {
+                  action: 'Pagar con Mercado Pago',
+                  valueProp: 'Todos tus datos protegidos',
+                },
+              }}
+            >
+              Pagar
+            </Wallet>
+          )}
         </CardSummaryContent>
       </CardSummaryStyled>
     </CardContainer>

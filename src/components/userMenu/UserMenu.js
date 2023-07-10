@@ -1,6 +1,5 @@
-// import * as userActions from '../../redux/user/user-actions';
 import { useSelector /* , useDispatch */ } from 'react-redux';
-import { auth } from '../../firebase/firebase-utils';
+
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
@@ -15,23 +14,22 @@ export const UserMenu = ({ user, handleToggle }) => {
   const { hiddenMenu } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
+  const signOut = () => {
+    localStorage.removeItem('authData');
+    navigate(0);
+  };
+
   return (
     <>
       {!hiddenMenu && <Shadow onClick={handleToggle} />}
       {!hiddenMenu ? (
         <UserMenuStyled>
-          <WelcomeTitle>Hola {user.displayName}</WelcomeTitle>
+          <WelcomeTitle>Hola {user.name}</WelcomeTitle>
           <MenuOptions>
             <Link to="mis-ordenes" onClick={handleToggle}>
               <MenuOptionElement>Mis Ordenes</MenuOptionElement>
             </Link>
-            <MenuOptionElement
-              onClick={() =>
-                auth.signOut().then(() => {
-                  navigate('/');
-                })
-              }
-            >
+            <MenuOptionElement onClick={signOut}>
               Cerrar Sesion
             </MenuOptionElement>
           </MenuOptions>
