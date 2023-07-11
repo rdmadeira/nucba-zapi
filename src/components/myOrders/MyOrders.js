@@ -19,10 +19,7 @@ import {
 } from './myOrdersElements';
 
 export const MyOrders = ({ orders }) => {
-  /* console.log(
-    'typeof orders.result[0].createdAt',
-    typeof orders.result[0].createdAt
-  ); */
+  console.log('orders', orders);
 
   return (
     <Container>
@@ -53,13 +50,20 @@ export const MyOrders = ({ orders }) => {
                     </OrderUl>
                     <StatusContainerStyled>
                       <Status type={order.status.state}>
-                        {order.status.state}
+                        {order.statusId === 1
+                          ? 'pendiente pago'
+                          : order.statusId === 5
+                          ? 'aprobado'
+                          : order.status.state}
                       </Status>
                     </StatusContainerStyled>
+
                     <Flex>
                       <Link to={`${order.id}`}>
                         <CustomButton w="150px" m="0">
-                          Ver resumen
+                          {order.status.state === 'active'
+                            ? 'Pagar'
+                            : 'Ver resumen'}
                         </CustomButton>
                       </Link>
                     </Flex>

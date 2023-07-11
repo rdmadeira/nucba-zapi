@@ -6,6 +6,8 @@ import useOrders from '../../hooks/useOrders';
 import useProducts from '../../hooks/useProducts';
 import { CustomButton } from '../UI';
 
+import { Wallet, initMercadoPago } from '@mercadopago/sdk-react';
+
 import {
   HeaderResume,
   ProductResume,
@@ -25,19 +27,22 @@ import {
   Status,
 } from './OrderResumeElements';
 
+initMercadoPago(process.env.REACT_APP_PUBLIC_KEY_MP, {
+  locale: 'es-AR',
+});
+
 export const OrderResume = () => {
   let { orderId } = useParams(); // captura el orderId especificado en la ruta del elemento Resume, en App.js
   /* let { orders } = useSelector((state) => state.orders); */
   let order = useOrders(orderId);
   let orderItems = useOrderItems(orderId);
-  console.log(orderItems);
 
   const completeOrder = {
     ...order?.data?.result,
     OrderItems: orderItems?.data?.result,
   };
 
-  console.log(completeOrder); //yes!!
+  /* console.log(completeOrder); */ //yes!!
 
   return (
     <Container>
@@ -52,11 +57,11 @@ export const OrderResume = () => {
           </TitleContainerStyled>
           <StatusContainerStyled>
             <Status type={completeOrder?.status?.state}>
-              {/* Hacer el request por el statusId */}
-              {
-                completeOrder?.status
-                  ?.state /* Hacer el request por el statusId */
-              }
+              {completeOrder.statusId === 1
+                ? 'pendiente pago'
+                : completeOrder.statusId === 5
+                ? 'aprobado'
+                : completeOrder.status?.state}
             </Status>
           </StatusContainerStyled>
         </HeaderResume>
@@ -103,6 +108,23 @@ export const OrderResume = () => {
               </span>
             </CostLi>
           </ProductUl>
+          {completeOrder.statusId === 1 && (
+            <Wallet
+              /* onSubmit={() => dispatch(cartActions.clearCart())} */
+              initialization={{
+                preferenceId: completeOrder.paymentId,
+                redirectMode: 'modal',
+              }}
+              customization={{
+                texts: {
+                  action: 'pay',
+                  valueProp: 'security_safety',
+                },
+              }}
+            >
+              Pagar
+            </Wallet>
+          )}
         </CostResume>
       </OrderHistory>
     </Container>

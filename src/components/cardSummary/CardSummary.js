@@ -4,7 +4,9 @@ import { formatPriceARS } from '../../utils';
 import { Spinner } from '../UI/Spinner';
 import { Wallet, initMercadoPago } from '@mercadopago/sdk-react';
 
-initMercadoPago('APP_USR-19b9fa39-94f5-4bcd-bb70-36fde9b1c640');
+initMercadoPago(process.env.REACT_APP_PUBLIC_KEY_MP, {
+  locale: 'es-AR',
+});
 
 const CardContainer = styled.div`
   max-width: 660px;
