@@ -96,9 +96,17 @@ export const Order = () => {
           </OrderContent>
         )}
         <DialogFooter>
-          <Link to="/checkout" onClick={handlerToggle}>
-            <Confirmbutton>Ir a Pagar {formatPriceARS(total)}</Confirmbutton>
-          </Link>
+          {cartItems.length < 1 ? (
+            <Confirmbutton disabled={true}>
+              No hay items {formatPriceARS(total)}
+            </Confirmbutton>
+          ) : (
+            <Link to="/checkout" onClick={handlerToggle}>
+              <Confirmbutton disabled={false}>
+                Ir a Pagar {formatPriceARS(total)}
+              </Confirmbutton>
+            </Link>
+          )}
         </DialogFooter>
       </OrderStyled>
     </>

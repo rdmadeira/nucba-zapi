@@ -64,8 +64,17 @@ export const Confirmbutton = styled(Title)`
   color: white;
   border-radius: 8px;
   width: 200px;
-  cursor: pointer;
   background-color: ${nucbazapiRed};
+  ${({ disabled }) =>
+    disabled
+      ? `
+          cursor: not-allowed;
+          opacity: 0.7;
+        `
+      : `
+          cursor: pointer;
+          opacity: 1;
+        `}
   text-align: center;
   padding: 10px;
   &:hover {

@@ -100,8 +100,8 @@ export const CardSummary = ({
               }}
               customization={{
                 texts: {
-                  action: 'Pagar con Mercado Pago',
-                  valueProp: 'Todos tus datos protegidos',
+                  action: 'pay',
+                  valueProp: 'security_safety',
                 },
               }}
             >

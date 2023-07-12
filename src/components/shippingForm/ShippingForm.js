@@ -12,8 +12,6 @@ import { useMutation } from '@tanstack/react-query';
 import * as cartActions from '../../redux/cart/cartActions';
 import axios from 'axios';
 
-import * as orderActions from '../../redux/orders/ordersActions';
-
 export const ShippingForm = () => {
   const [formState, inputHandle] = useForm(
     {
@@ -71,13 +69,15 @@ export const ShippingForm = () => {
 
   const submitHandle = (e) => {
     e.preventDefault();
+
+    if (cartItems.length < 1) return;
+
     if (!formState.isValid) {
       console.log('Completar todos los datos');
       return;
     }
 
     const token = JSON.parse(localStorage.getItem('authData')).token;
-    console.log(token);
 
     // Transformar los items props de acuerdo con la api
 
