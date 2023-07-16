@@ -74,7 +74,7 @@ const Login = () => {
     useMutation({
       mutationFn: async (vars) => {
         const myPostAxios = axios.create({
-          baseURL: 'http://localhost:8000/api/v1/auth/',
+          baseURL: `${process.env.REACT_APP_API_BASE_URL}/auth/`,
           headers: {
             'Content-Type': 'application/json',
           },

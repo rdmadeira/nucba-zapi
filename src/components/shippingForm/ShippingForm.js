@@ -30,7 +30,7 @@ export const ShippingForm = () => {
     mutationKey: 'orders',
     mutationFn: async (vars) => {
       const customAxios = axios.create({
-        baseURL: 'http://localhost:8000/api/v1/orders/',
+        baseURL: `${process.env.REACT_APP_API_BASE_URL}/orders/`,
         headers: {
           Authorization: 'Bearer ' + vars.token,
           'Content-Type': 'application/json',
