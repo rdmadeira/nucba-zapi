@@ -1,9 +1,9 @@
 import React from 'react';
-/* import { useSelector } from 'react-redux'; */
+
 import { useParams } from 'react-router-dom';
 import useOrderItems from '../../hooks/useOrderItems';
 import useOrders from '../../hooks/useOrders';
-import useProducts from '../../hooks/useProducts';
+
 import { CustomButton } from '../UI';
 
 import { Wallet, initMercadoPago } from '@mercadopago/sdk-react';
@@ -26,6 +26,8 @@ import {
   StatusContainerStyled,
   Status,
 } from './OrderResumeElements';
+import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 initMercadoPago(process.env.REACT_APP_PUBLIC_KEY_MP, {
   locale: 'es-AR',
@@ -33,9 +35,21 @@ initMercadoPago(process.env.REACT_APP_PUBLIC_KEY_MP, {
 
 export const OrderResume = () => {
   let { orderId } = useParams(); // captura el orderId especificado en la ruta del elemento Resume, en App.js
-  /* let { orders } = useSelector((state) => state.orders); */
+
   let order = useOrders(orderId);
   let orderItems = useOrderItems(orderId);
+
+  const querystring = window.location.search;
+  const params = useMemo(() => new URLSearchParams(querystring), [querystring]);
+  /* const merchant_order_id = params.get('merchant_order_id');
+  const payment_id = params.get('payment_id');
+  const status = params.get('status'); */
+
+  useEffect(() => {
+    if (params.has('merchant_order_id') || params.has('payment_id')) {
+      // Crear mutate para PUT update order, crear ruta en la api antes
+    }
+  }, [params]);
 
   const completeOrder = {
     ...order?.data?.result,

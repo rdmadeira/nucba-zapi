@@ -18,7 +18,7 @@ import CheckoutBackground from '../assets/checkout.jpg';
 const Checkout = () => {
   // PARA HACER: NO USAR USESELECTOR DE REDUX, Y SÍ REACT-QUERY, POR MEDIO DEL HOOK DEL CONTEXT AUTH:
   const currentUser = useAuth();
-  console.log(currentUser);
+
   const navigate = useNavigate();
 
   useEffect(() => {
