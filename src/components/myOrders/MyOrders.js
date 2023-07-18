@@ -19,7 +19,9 @@ import {
 } from './myOrdersElements';
 
 export const MyOrders = ({ orders }) => {
-  console.log('orders', orders);
+  let sortedOrders = orders?.result.sort((a, b) => {
+    return a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0;
+  });
 
   return (
     <Container>
@@ -34,8 +36,8 @@ export const MyOrders = ({ orders }) => {
           </OrderTitle>
 
           <div>
-            {orders?.result?.length > 0 ? (
-              orders?.result?.map((order) => (
+            {sortedOrders?.length > 0 ? (
+              sortedOrders?.map((order) => (
                 <OrderContent key={order.id}>
                   <OrderDetails>
                     <OrderUl>

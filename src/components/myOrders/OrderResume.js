@@ -28,6 +28,7 @@ import {
 } from './OrderResumeElements';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
+import useMutationOrders from '../../hooks/useMutationOrders';
 
 initMercadoPago(process.env.REACT_APP_PUBLIC_KEY_MP, {
   locale: 'es-AR',
@@ -40,16 +41,39 @@ export const OrderResume = () => {
   let orderItems = useOrderItems(orderId);
 
   const querystring = window.location.search;
-  const params = useMemo(() => new URLSearchParams(querystring), [querystring]);
+  const orderMPReturnParams = useMemo(
+    () => new URLSearchParams(querystring),
+    [querystring]
+  );
+  const { data, isLoading, mutate } = useMutationOrders(orderId, {
+    method: 'put',
+  });
   /* const merchant_order_id = params.get('merchant_order_id');
   const payment_id = params.get('payment_id');
   const status = params.get('status'); */
 
   useEffect(() => {
-    if (params.has('merchant_order_id') || params.has('payment_id')) {
+    if (
+      orderMPReturnParams.has('merchant_order_id') ||
+      orderMPReturnParams.has('payment_id')
+    ) {
       // Crear mutate para PUT update order, crear ruta en la api antes
+      mutate(
+        {
+          merchant_order_id: orderMPReturnParams.get('merchant_order_id'),
+          payment_id: orderMPReturnParams.get('payment_id'),
+          orderId,
+          status: orderMPReturnParams.get('status'),
+        },
+        {
+          onSuccess: (data, vars) => {
+            console.log(data);
+            console.log(vars);
+          },
+        }
+      );
     }
-  }, [params]);
+  }, [orderMPReturnParams, mutate, orderId]);
 
   const completeOrder = {
     ...order?.data?.result,
