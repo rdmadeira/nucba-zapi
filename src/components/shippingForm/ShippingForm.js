@@ -8,9 +8,8 @@ import { COSTO_DE_ENVIO } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import useMutationOrders from '../../hooks/useMutationOrders';
 import * as cartActions from '../../redux/cart/cartActions';
-import axios from 'axios';
 
 export const ShippingForm = () => {
   const [formState, inputHandle] = useForm(
@@ -26,23 +25,7 @@ export const ShippingForm = () => {
     },
     false
   );
-  const { data, isLoading, mutate } = useMutation({
-    mutationKey: 'orders',
-    mutationFn: async (vars) => {
-      const customAxios = axios.create({
-        baseURL: `${process.env.REACT_APP_API_BASE_URL}/orders/`,
-        headers: {
-          Authorization: 'Bearer ' + vars.token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      });
-
-      /*   */
-
-      return customAxios.request('/', { data: vars });
-    },
-  });
+  const { data, isLoading, mutate } = useMutationOrders();
 
   const [preferenceId, setpreferenceId] = useState(null);
 
