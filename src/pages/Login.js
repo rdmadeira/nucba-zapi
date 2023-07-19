@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+/* import { useMutation } from '@tanstack/react-query'; */
+import useMutationAuth from '../hooks/useMutationAuth';
 import styled from 'styled-components';
 import { useAuth } from '../hooks/useAuth';
 
@@ -23,7 +24,7 @@ import {
 import { signInWithGoogle } from '../firebase/firebase-utils';
 import { nucbazapiRed } from '../styles/utilities';
 
-import axios from 'axios';
+/* import axios from 'axios'; */
 
 const ContainerButtons = styled.div`
   display: flex;
@@ -71,7 +72,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { data, isSuccess, isLoading, isError, mutate, error, reset } =
-    useMutation({
+    useMutationAuth();
+  /* useMutation({
       mutationFn: async (vars) => {
         const myPostAxios = axios.create({
           baseURL: `${process.env.REACT_APP_API_BASE_URL}/auth/`,
@@ -90,11 +92,10 @@ const Login = () => {
           ? myPostAxios.request('signup', { data: vars })
           : myPostAxios.request('login', { data: vars }); // Faltaba el error, por eso no entraba en onError de useMutation!!
       },
-    });
+    }); */
 
   useEffect(() => {
-    if (currentUser.data) {
-      console.log(currentUser.data);
+    if (currentUser?.data) {
       navigate(-1);
     }
   }, [currentUser, navigate]);
@@ -127,8 +128,8 @@ const Login = () => {
         onError: (error) => console.log('error', error),
         onSuccess: (data) => {
           const authDataString = JSON.stringify({
-            id: data.userId,
-            token: data.token,
+            id: data.data.result.userId,
+            token: data.data.result.token,
           });
           localStorage.setItem('authData', authDataString);
           alert(`${data.name}, succesfully registered account!`);
@@ -173,9 +174,10 @@ const Login = () => {
       },
       {
         onSuccess: (data, vars) => {
+          console.log(data);
           const authDataString = JSON.stringify({
-            id: data.userId,
-            token: data.token,
+            id: data.data.result.userId,
+            token: data.data.result.token,
           });
           localStorage.setItem('authData', authDataString);
           console.log(authDataString);
